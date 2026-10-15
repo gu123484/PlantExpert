@@ -1,0 +1,1020 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width" />
+    <meta name="filetype" content="0" /> 
+    <meta name="publishedtype" content="1" /> 
+    <meta name="pagetype" content="" />
+    <meta name="catalogs" content="" />
+    
+    <meta name="contentid" content="">
+    <meta name="publishdate" content="">
+    <meta name="author" content="">
+    <meta name="source" content="">
+    <link href="/Signage.png" rel="shortcut icon" type="image/x-icon" />
+    <title></title>
+    
+    <script src="/Scripts/modernizr-2.6.2.js"></script>
+
+    <link href="/Content/foundation-datepicker.min.css" rel="stylesheet"/>
+
+    <script src="/Content/Scripts/jquery/jquery-1.10.2.min.js"></script>
+    <script src="/Scripts/public.js"></script>
+    <script src="/Scripts/fileHelper.js"></script>
+    <link href="/Content/message.css" rel="stylesheet" />
+    <script src="/Scripts/message.js"></script>
+    <link href="/Content/zy_Main.css" rel="stylesheet" />
+    <link href="/Content/css/style.css" rel="stylesheet" />
+    <link href="/Content/css/common.css?v=1" rel="stylesheet" />
+    <link href="/Content/css/nyb_base.css" rel="stylesheet" />
+    <link href="/Content/css/nyb_index.css" rel="stylesheet" />
+    <script src="/Content/Scripts/nyb_index.js"></script>
+    <script src="/Content/Scripts/loopscl.js"></script>
+    <script src="/Content/Scripts/jquery.SuperSlide.2.1.1.js"></script>   
+    
+    <script src="/Content/Scripts/plugins/My97DatePicker/WdatePicker.js"></script>
+
+    <script>
+        var fileServerIP = 'https://www.natesc.org.cn/';
+        
+    </script>
+    <style>
+        .year2021_100 {
+            background: url("/Content/images/top100year_2021.png") no-repeat top center;
+            height: 150px;
+            display:none;
+        }
+    </style>
+</head>
+<body>
+    
+    <script src="/Scripts/jquery-1.11.3.min.js"></script>
+<style>
+    /* CSS Document */
+    input, select, label {
+        vertical-align: middle;
+    }
+
+    ul, ol, li {
+        list-style: none;
+    }
+
+    input, img, select {
+        border: 0;
+        outline: none;
+    }
+
+    a { /*color:#333;*/
+        color: #000;
+        text-decoration: none;
+        outline: none;
+    }
+
+    .nav {
+        padding: 12px 0;
+        margin: 0 0 5px;
+        overflow: hidden;
+        color: #888;
+    }
+
+        .nav span, .nav a {
+            color: #888;
+        }
+
+            .nav a:hover {
+                color: #c40001;
+            }
+
+    #frame {
+        float: right;
+        margin-right: 50px;
+    }
+
+    .weather .cross-simple-icon {
+        line-height: 32px;
+    }
+
+    .box strong {
+        font-size: 15px;
+    }
+</style>
+<script>
+    $(function () {
+        $('.searchbtn').click(function () {
+            window.location.href = "/News/NewsListPage?Category=搜索&searchContent=" + $("#inputs").val();
+        });
+        nav_cur();
+
+    });
+
+    //头部导航点击添加class效果
+    var selLi = getUrlParam("kind");
+    function nav_cur() {
+        var src = window.location.href.toUpperCase();
+        console.log('src', src);
+        if (src.indexOf("JGZN") !== -1 || selLi.indexOf("JGZN") !== -1) {
+            $(".menu_con ul li:eq(1)").addClass("cur").siblings().removeClass("cur");
+        } else if (src.indexOf("DTXX") !== -1 || selLi.indexOf("DTXX") !== -1) {
+            $(".menu_con ul li:eq(2)").addClass("cur").siblings().removeClass("cur");
+        } else if (src.indexOf("TZGG") !== -1 || selLi.indexOf("TZGG") !== -1) {
+            $(".menu_con ul li:eq(3)").addClass("cur").siblings().removeClass("cur");
+        } else if (src.indexOf("ZTZL") !== -1 || selLi.indexOf("ZTZL") !== -1) {
+            $(".menu_con ul li:eq(4)").addClass("cur").siblings().removeClass("cur");
+        } else if (src.indexOf("DJQT") !== -1 || selLi.indexOf("DJQT") !== -1) {
+            $(".menu_con ul li:eq(5)").addClass("cur").siblings().removeClass("cur");
+        } else if (src.indexOf("HYTX") !== -1 || selLi.indexOf("HYTX") !== -1) {
+            $(".menu_con ul li:eq(6)").addClass("cur").siblings().removeClass("cur");
+        } else if (src.indexOf("KJBZ") !== -1 || selLi.indexOf("KJBZ") !== -1) {
+            $(".menu_con ul li:eq(7)").addClass("cur").siblings().removeClass("cur");
+        } else if (src.indexOf("GJHZ") !== -1 || selLi.indexOf("GJHZ") !== -1) {
+            $(".menu_con ul li:eq(8)").addClass("cur").siblings().removeClass("cur");
+        }
+        //else if (src.indexOf("SYSF") !== -1 || selLi.indexOf("SYSF") !== -1) {
+        //    $(".menu_con ul li:eq(9)").addClass("cur").siblings().removeClass("cur");
+        //}
+        else if (src.indexOf("JSMS") !== -1 || selLi.indexOf("JSMS") !== -1) {
+            $(".menu_con ul li:eq(9)").addClass("cur").siblings().removeClass("cur");
+        } else if (src.indexOf("YWXT") !== -1 || selLi.indexOf("YWXT") !== -1) {
+            $(".menu_con ul li:eq(10)").addClass("cur").siblings().removeClass("cur");
+        } else if (src.indexOf("NJSJ") !== -1 || selLi.indexOf("NJSJ") !== -1) {
+            $(".menu_con ul li:eq(11)").addClass("cur").siblings().removeClass("cur");
+        } else {
+            $(".menu_con ul li:eq(0)").addClass("cur").siblings().removeClass("cur");
+        }
+    }
+    function AddFavorite() {
+        var title = document.title;
+        var url = document.URL;
+        try {
+            window.external.addFavorite(url, title);
+        }
+        catch (e) {
+            try {
+                window.sidebar.addPanel(title, url, "");
+            }
+            catch (e) {
+                alert("抱歉，您所使用的浏览器无法完成此操作。\n\n加入收藏失败，请使用Ctrl+D进行添加");
+            }
+        }
+    }
+</script>
+<header>
+    <div style="background: url(/Content/images/index/banner.png) no-repeat; background-position: bottom center;">
+        <!--top begin-->
+        <div class="top">
+            <div class="top_con">
+                <div class="calendar">
+                    <script src="/Scripts/nyb_calendar.js"></script>
+                </div>
+                
+                <div class="top_right">
+                    <img src="/Content/images/index/dingwei.png" style="vertical-align: middle; margin-right: 10px; " /><a href="javascript:;" target="_blank" class="tool_mail">全国农业技术推广服务中心</a>
+                    <a href="#" rel="sidebar" onclick="AddFavorite();"><img style="height:16px;vertical-align:middle;margin-left:5px;" src="/Content/images/index/shoucang.png" title="收藏" /></a>
+                </div>
+            </div>
+        </div>
+        <!--top end-->
+        <!--header begin-->
+        <div class="header">
+            <div class="header_con">
+                <h1 class="logo"><a href="/home/index"><img src="/Content/images/index/logo.png"></a></h1>
+                <div class="search">
+                    <form class="fm_search" action="/News/NewsSearchListPage" target="_blank">
+                        <i class="bgimg"></i>
+                        <input type="text" name="orsen" class="txt" placeholder="请输入关键词">
+                        <input type="hidden" name="channelid" value="282019">
+                        <input type="submit" value="搜索" class="btn">
+                    </form>
+                </div>
+            </div>
+        </div>
+        <!--header end-->
+    </div>
+    <!--menu begin-->
+    <div class="menu">
+        <div class="menu_con">
+            <ul>
+                <li id="shouye"><a href="/">首页</a></li>
+                <li><a href="/JGZN">机构职能</a></li>
+                <li><a href="/DTXX/Main">动态信息</a></li>
+                <li><a href="/TZGG/List">通知公告</a></li>
+                <li><a href="/ZTZL">专题专栏</a></li>
+                <li><a href="/DJQT/List">党建群团</a></li>
+                
+                <li><a href="/HYTX">行业体系</a></li>
+                <li><a href="/KJBZ/List">科技标准</a></li>
+                <li><a href="/GJHZ/Index">国际合作</a></li>
+                
+                
+                <li><a href="/JSMS/Index?CategoryId=73af3804-f7fb-4c64-8c0a-f73ada085099">技术模式</a></li>
+                <li><a href="/YWXT">业务系统</a></li>
+                
+            </ul>
+        </div>
+    </div>
+</header>
+    <div class="main">
+        
+<script type="text/javascript">
+    $("meta[name=pagetype]").attr("content", "1");
+    var fileServerIP = 'https://www.natesc.org.cn/';
+    var realpath = 'admin/';
+    var isVisit = '1';
+    var id = getUrlParam("id");
+    var title = getUrlParam("title");
+    var Category = getUrlParam("Category");
+    var url = getUrlParam("Kind");
+    var urlname = getUrlParam("Kindname");
+    var CategoryId = getUrlParam("CategoryId");
+    $("meta[name=catalogs]").attr("content", "natesc_" + CategoryId);
+    $("meta[name=contentid]").attr("content", id);
+    var PV = 0;
+    if (id == null) id = "";
+    if (title == null) title = "";
+    if (Category == null) Category = "";
+    //
+    function goUrl() {
+        var str = document.referrer;
+        location.href = document.referrer;
+
+    }
+    $(function () {
+        if (id != null) {
+            getNewsInfo(id);
+        }
+        if (Category != "") {
+            $("#suburl").html(Category);
+            $("#titlename").html(Category);
+        }
+        if (CategoryId != null) {
+            getRelationlist(CategoryId);
+        }
+        ////纪录浏览纪录//详情页的新闻ID和所属栏目ID不能为空
+        //if (isVisit == "1") {
+        //    $.ajax({
+        //        type: "post",
+        //        url: "/news/SetUserHistory",
+        //        dataType: "json",
+        //        data: "CategoryIDL1=" + "&CategoryIDL2=" + "&CategoryIDL3=&NewsID=" + id + "&CategoryId=" + CategoryId + "&VisitLevel=&IP=",
+        //        success: function (msg) {
+        //            console.log(msg);
+        //        }
+        //    });
+        //}
+    });
+    function getNewsInfo(id) {
+        $.ajax({
+            type: "post",
+            url: "/news/GetNewsEntity",//?Category=" + "会议通知" + "&OrganizeId=",
+            dataType: "json",
+            data: "NewsId=" + id + "&NewsTitle=" + title,
+            success: function (msg) {
+                if (msg != null) {
+                    document.title = msg.FullHead;
+                    $("#newsTitle").html(msg.FullHead);
+                    $("#secondTitle").html(msg.BriefHead);
+                    if (msg.ImportRela != "" && msg.ImagePath != null && msg.ImagePath != "" && Category != "视频") {
+                        $(".FirstImg").attr("src", fileServerIP + msg.ImagePath);
+                        $(".firstimg").show();
+                    }
+                    var str = "";
+                    if (msg.ReleaseTime != "")
+                        str += "<span class='span1'>日期：<span class='span2'>" + formatNumToDate(msg.ReleaseTime) + "</span></span>";
+                    $("meta[name=publishdate]").attr("content", formatNumToDate(msg.ReleaseTime));
+                    if (msg.AuthorName != null && msg.AuthorName != "")
+                        str += "<span class='span1'>作者：<span class='span2'>" + msg.AuthorName + "</span></span>";
+                    if (msg.SourceName != null && msg.SourceName.trim() != "") //可选的来源名称
+                    {
+                        str += "<span class='span1'>来源：<span class='span2'>" + msg.SourceName + "</span></span>";
+                        $("meta[name=source]").attr("content", msg.SourceName);
+                        $("meta[name=author]").attr("content", msg.CompileName);
+                    }
+                    else if (msg.CompileName != null && msg.CompileName != "") { //是必选的处室名称
+                        str += "<span class='span1'>来源：<span class='span2'>" + msg.CompileName + "</span></span>";
+                        $("meta[name=author]").attr("content", msg.CompileName);
+                    }
+                    str += "<span class='span1'>【字体：<a href='javascript:;'class='changes span2' size='18' onclick='changesize(\"" + "18px" + "\",this);'>大</a> <a href='javascript:;'class='changes span3' size='16' onclick='changesize(\"" + "16px" + "\",this);'>中</a> <a href='javascript:;' class='changes span2' size='14' onclick='changesize(\"" + "14px" + "\",this);'>小</a>】</span>";
+                    str += "<a onclick='window.print();' class='span1 print'>打印本页</a>";
+                    $("#newsTime").empty();
+                    $("#newsTime").append(str);
+                    $("#content").html(msg.NewsContent);
+                    var t = $("#content").text();
+                    t = t.replace(/src=\"\/Content\/scripts\/plugins\/ueditor\/dialogs/g, "src=\"" + fileServerIP + "/Content\/scripts\/plugins\/ueditor\/dialogs");
+                    t = t.replace(/href=\"\/Content\/scripts\/plugins\/ueditor\/dialogs/g, "href=\"" + fileServerIP + "/Content\/scripts\/plugins\/ueditor\/dialogs");
+                    t = t.replace(/src=\"\/UeditorUploadFiles/g, "src=\"" + fileServerIP + "/UeditorUploadFiles ");
+                    t = t.replace(/href=\"\/UeditorUploadFiles/g, "href=\"" + fileServerIP + "/UeditorUploadFiles");
+                    t = t.replace(/src=\"..\/..\/Upload/g, "src=\"" + fileServerIP + realpath + "Upload");
+                    t = t.replace(/href=\"..\/..\/Upload/g, "href=\"" + fileServerIP + realpath + "Upload ");
+                    t = t.replace(/<a /g, "<a download='' ");
+                    t = t.replace(/<video /g, "<video autoplay='autoplay' muted='muted' ");
+
+                    document.getElementById("content").innerHTML = t;
+                    var resultStr  = document.getElementById("content").innerText;
+                    resultStr = resultStr.replace(/\ +/g, ""); //去掉空格
+                    resultStr = resultStr.replace(/[ ]/g, "");    //去掉空格
+                    resultStr = resultStr.replace(/[\r\n]/g, ""); //去掉回车换行
+                    resultStr = resultStr.replace(/[\n]/g, ""); //去掉换行
+                    resultStr = resultStr.replace(/[\r]/g, ""); //去掉回车
+                    if (resultStr.length < 54 && resultStr.substr(resultStr.length - 4, 4).toLowerCase() == ".pdf") {
+                        console.log(resultStr);
+                        var a = document.getElementById("content").getElementsByTagName("a");
+                        if (a.length == 1) {
+                            var ss = document.getElementById("content").innerHTML;
+                            ss=ss.replace(/<br>/g, "");
+                            document.getElementById("content").innerHTML=ss+"<embed  src='" + a[0].href + "' id='review' style='width:100%; height:750px;' ></embed>"
+                        }
+                    }
+                    document.getElementById("files").innerHTML = "浏览量：" + msg.PV;
+                    PV = msg.PV;
+                    setTimeout(function () { setpic() }, 500);
+                    getFileList(msg.FileList);
+
+                }
+                SetPV(PV, CategoryId, id);
+                $('video').bind('contextmenu', function () { return false; });
+                SetInfo();
+                var video = document.getElementsByTagName("video");
+                if (video[0]) {
+                    video[0].play();
+                }
+
+            }
+        });
+    }
+    function setpic() {
+        $("#content").find("img").each(function (index, item) {
+            var width = $(item).width();
+
+            if (width > 1030) {
+                $(item).css("margin-left", -(width - 1030) / 2)
+                $(item).css("padding", 0)
+            }
+        })
+
+    }
+
+    function getFileList(data) {
+        $(".filelist").empty();
+        if (data != null) {
+            var lis = "";
+            for (var i = 0; i < data.length; i++) {
+                e = data[i];
+                var file = e.FileName.split('.');
+                var type = e.Type;
+                lis += "<tr><td><a class='line' href='" + fileServerIP + e.FilePath + "' fid='" + e.FileId + "'>" + file[0] + "." + type.toLowerCase() + "</a></td><td>" + e.Size + "</td><td>" + e.Type + "</td><td>" + e.DownCount + "</td></tr>";
+            }
+            $(".filelist").append(lis);
+            if (lis != "")
+            $(".file").show();
+        }
+        $(".line").click(function () {
+            var fileid = $(this).attr("fid");
+
+            $.ajax({
+                type: "post",
+                url: "/news/UpdatefileCount",
+                dataType: "json",
+                data: { FileId: fileid },
+                async: true,
+                success: function (msg) {
+                    if (msg != null) {
+
+                    }
+                }
+            });
+        });
+    }
+
+    function getRelationlist(CategoryId) {
+        var d = "CategoryId=" + CategoryId;
+        d += "&PageSize=5&curPage=1";
+        $("#relateli").empty();
+        $.ajax({
+            type: "post",
+            url: "/news/GetListForPage",
+            dataType: "json",
+            data: d,
+            async: true,
+            success: function (msg) {
+                if (msg != null) {
+                    var lis = "";
+
+                    for (var i = 0; i < msg.News.length; i++) {
+                        e = msg.News[i];
+                        lis += "<li><a href='/news/des?id=" + e.NewsId + "&Category=行业体系&CategoryId=" + CategoryId + "&kind=" + selLi + "' target='_blank' class='a_2'>" + e.FullHead + "</a>";
+                        lis += '<span class="date fr dc_3">' + formatNumToDate(e.ReleaseTime) + "</span></li>";
+                    }
+                    $("#relateli").append(lis);
+                }
+            }
+        });
+    }
+
+    function SetPV(PV, CategoryId, NewsId) {
+        var d = "PV=" + PV + "&CategoryId=" + CategoryId + "&NewsId=" + NewsId;
+        $("#files").empty();
+        $.ajax({
+            type: "post",
+            url: "/news/SetPV",
+            dataType: "json",
+            data: d,
+            async: true,
+            success: function (msg) {
+                if (msg != PV) {
+                    //document.getElementById("files").innerHTML = "浏览量：" + msg;
+                }
+            }
+        });
+    }
+
+    function changesize(size, e) {
+        $("#content p").css("font-size", size);
+        $("#content span").css("font-size", size);
+        $(".changes").removeClass("span3");
+        $(".changes").removeClass("span2");
+        $(".changes").siblings(e).addClass("span2");
+        $(e).removeClass("span2");
+        $(e).addClass("span3");
+    }
+    function SetInfo() {
+        (function (w, d, g, r) {
+            w['_wd_o'] = r;
+            w[r] = w[r] || function () { arguments.t = 1 * new Date(), (w[r].q = w[r].q || []).push(arguments); };
+            var a = d.createElement('script'), m = d.getElementsByTagName('script')[0];
+            a.async = 1;
+            a.src = g; m.parentNode.insertBefore(a, m);
+        })(window, document, '//cl3.webterren.com/webdig.js?z=41', '_wa');
+        _wa('wd_paramtracker', '_wdxid=000000000000000000000000000000000000000000');
+    }
+
+</script>
+
+<div class="daohang">
+    您当前所在位置：<a href="/home/index">首页</a> > <a href="javascript:;" onclick="goUrl();" id="suburl">动态信息</a>
+</div>
+<div style="border:1px solid #ddd;border-radius:3px;min-height:400px;padding-left:24px;padding-right:24px;">
+    <div style="text-align:center;">
+        <h1 id="newsTitle" style="margin-top: 35px; margin-bottom: 15px;"></h1>
+        <h4 id="secondTitle" style="font-size:17px; margin-bottom:30px;font-weight:500;"></h4>
+    </div>
+    <div id="newsTime">
+        <span class="span1">发布日期：<span class="span2">2013-10-11</span></span>
+        <span class="span1">来源：<span class="span2">河北省教育厅</span></span>
+        <span class="span1">作者：<span class="span2">河北省教育厅</span></span>
+        <span class="span1">【字体：<a href="javascript:;" data-ftsz="18px">大</a> <a href="javascript:;" data-ftsz="16px" class="adc_4">中</a> <a href="javascript:;" data-ftsz="14px">小</a>】</span>
+        <a onclick="window.print();"  class="print">打印本页</a>
+    </div>
+    <div class="firstimg"><img class="FirstImg" style="max-width:75%;" src="" /></div>
+    <div id="content">
+
+    </div>
+    <div class="erweim">
+        <div style="margin-bottom:5px;font-size:17px;font-family:KaiTi;">更多精彩内容请关注</div>
+        <img src="/Content/images/erwe.jpg" />
+    </div>
+    <table class="file" style="display:none;" border="1">
+        <thead>
+            <tr>
+                <th>文件名称</th>
+                <th>大小</th>
+                <th>类型</th>
+                <th>下载量</th>
+            </tr>
+        </thead>
+        <tbody class="filelist">
+            <tr>
+                <td><a class="line" href="#">番荔枝017.jpg</a></td>
+                <td>1M</td>
+                <td>JPG</td>
+                <td>30</td>
+            </tr>
+        </tbody>
+    </table>
+    <div id="files">阅览量：0</div>
+    <div class="bshare-custom" style="display:none;"><a title="分享到新浪微博" class="bshare-sinaminiblog"></a><a title="分享到人人网" class="bshare-renren"></a><a title="分享到QQ好友" class="bshare-qqim"></a><a title="分享到微信" class="bshare-weixin"></a><a title="更多平台" class="bshare-more bshare-more-icon more-style-addthis"></a><span class="BSHARE_COUNT bshare-share-count">0</span></div>
+    
+    <div id="relationlist">
+        <div class="tt"><label>相关新闻</label></div>
+        <ul id="relateli"></ul>
+    </div>
+</div>
+<style type="text/css">
+    .erweim {
+        height: 260px;
+        width: 100%;
+        text-align: center;
+    }
+    ifram {
+    width:100%;
+    height:800px;
+    }
+</style>
+
+<link href="/Content/common.css" rel="stylesheet" />
+<script src="/Scripts/common.js"></script>
+<div class="side">
+	<ul>
+		<li style="display:none;"><a href="#"><div class="sidebox"><img src="/Content/images/img/side_icon01.png"><span class="ShowPOP" title="网站反馈">网站反馈</span></div></a></li>
+        <li style="display:none;"><a href="#"><div class="sidebox"><img src="/Content/images/img/side_icon02.png"><span class="ShowPOP" title="栏目答疑">栏目答疑</span></div></a></li>
+        <li style="display:none;"><a href="javascript:void(0);"><div class="sidebox"><img src="/Content/images/img/side_icon04.png">QQ客服</div></a></li>
+		<li style="border:none;"><a href="javascript:goTop();" title="返回顶部" class="sidetop"><img src="/Content/images/img/side_icon05.png"></a></li>
+	</ul>
+</div>
+<div id="dd" title="意见反馈" style="width: 460px; height: 200px; display: none;">
+    <div class="dialogContent">
+        <div class="clear p-le13 m_top10">
+            <div><label style="font-size:14px;">联系方式&nbsp;:&nbsp;&nbsp;</label><input class="dia_inp" type="text" id="qcontant" style="border:1px solid #c7c7c7;border-radius:4px; width:378px; height:26px;padding-left:5px;" /><br /></div>
+            <div style="margin-top: 10px; margin-bottom: 10px;">
+                <label style="font-size:14px;">栏目标题&nbsp;:&nbsp;&nbsp;</label><input class="dia_inp" type="text" id="qtitle" style="border:1px solid #c7c7c7;border-radius:4px; width:378px; height:26px;padding-left:5px;" /><br />
+            </div>
+                <label class="f_left" style="margin-top:10px; margin-bottom:10px;font-size:14px;">留言内容&nbsp;:&nbsp;&nbsp;(反馈内容请控制在1000字以内)&nbsp;</label><div class="f_left">
+                    <textarea name="message" id="qmessage" class="user-info-mul" style="border-radius: 4px; min-height: 128px; padding: 5px 0 5px 5px; min-width: 453px; border: 1px solid #ccc; margin-bottom: 5px; margin-top: 5px;"></textarea>
+                </div>
+            </div>
+    </div>
+</div>
+
+<style type="text/css">
+   
+    .side {
+        position: fixed;
+        width: 54px;
+        height: 275px;
+        right: 0;
+        top: 584px;
+        z-index: 100;
+    }
+
+        .side ul li {
+            width: 54px;
+            height: 54px;
+            float: left;
+            position: relative;
+            border-bottom: 1px solid #fff;
+        }
+
+            .side ul li .sidebox {
+                position: absolute;
+                width: 54px;
+                height: 54px;
+                top: 0;
+                right: 0;
+                transition: all 0.3s;
+                background: #888;
+                opacity: 0.8;
+                filter: Alpha(opacity=80);
+                color: #fff;
+                font: 14px/54px "微软雅黑";
+                overflow: hidden;
+            }
+
+            .side ul li .sidetop {
+                width: 54px;
+                height: 54px;
+                line-height: 54px;
+                display: inline-block;
+                background: #888;
+                opacity: 0.8;
+                filter: Alpha(opacity=80);
+                transition: all 0.3s;
+            }
+
+                .side ul li .sidetop:hover {
+                    background: #076435;
+                    opacity: 1;
+                    filter: Alpha(opacity=100);
+                }
+
+            .side ul li img {
+                float: left;
+            }
+</style>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $(".side ul li").hover(function () {
+            $(this).find(".sidebox").stop().animate({ "width": "124px" }, 200).css({ "opacity": "1", "filter": "Alpha(opacity=100)", "background": "#076435" })
+        }, function () {
+            $(this).find(".sidebox").stop().animate({ "width": "54px" }, 200).css({ "opacity": "0.8", "filter": "Alpha(opacity=80)", "background": "#888" })
+        });
+    });
+
+    //回到顶部
+    function goTop() {
+        $('html,body').animate({ 'scrollTop': 0 }, 600);
+    }
+    $(".ShowPOP").click(function () {
+        var title = $(this).attr("title");
+        $.dialog({
+            title: title,
+            okValue: "提交",
+            fixed: true,
+            cancelValue: "取消",
+            content: document.getElementById("dd"),
+            ok: function () {
+                SubmitQ();
+            },
+            cancel: function () {
+
+            }
+        });
+        //$('#dd').dialog('open');
+        $("#qtitle").val("");
+        $("#qcontant").val("");
+        $("#qmessage").val("");
+    });
+    function SubmitQ() {
+        var title = $("#qtitle").val();
+        var contant = $("#qcontant").val();
+        var message = $("#qmessage").val();
+        if (contant == "") {
+            alert("请填写联系方式");
+            return false;
+        }
+        if (title == "") {
+            alert("请填写栏目标题");
+            return false;
+        }
+        if (message == "") {
+            alert("请填写反馈内容");
+            return false;
+        }
+        $.ajax({
+            url: "/Home/SaveFeedBack",
+            type: "Post",
+            dataType: "json",
+            async: false,
+            data: { "Title": title, "Contant": contant, "Main": message },
+            success: function (data, status) {
+                if (data != "") {
+                    alert("谢谢您的反馈！");
+                }
+            }
+        });
+    }
+</script>
+    </div>
+    
+    
+    <!-- 友情链接 -->
+<div class="gov_links">
+    <div class="gov-tab-links">
+        <div class="gov-tab-links-tabs">
+            <!-- 友情链接菜单 -->
+            <ul class="gov-links-tabs">
+                <li class="pic-link3">
+                    <a href="javascript:viod(0)">体系网站<img src="/Content/images/index/up2.png" alt=""></a>
+                </li>
+                <li class="pic-link3">
+                    <a href="javascript:viod(0)">省级农业农村部门网站<img src="/Content/images/index/up2.png" alt=""></a>
+                </li>    
+                <li class="pic-link3">
+                    <a style="" href="http://www.moa.gov.cn"><img style="padding:0;border:none;width:100%;height:100%;" src="/Content/images/index/lianjie.png"></a>
+                </li>
+                <li class="pic-link3">
+                    <a href="javascript:viod(0)">业务系统<img src="/Content/images/index/up2.png" alt=""></a>
+                </li>
+                <li class="pic-link3">
+                    <a href="javascript:viod(0)">资料下载<img src="/Content/images/index/up2.png" alt=""></a>
+                </li>
+            </ul>
+            <!-- 友情链接内容 -->
+            <div class="gov-tabs-main" id="txwz" style="display: none;">
+                <ul>
+                    <li onclick="window.open('http://www.bgt.moa.gov.cn');" title="办公厅（对台湾农业事务办公室）">办公厅（对台湾农业事务办公室）</li>
+                    <li onclick="window.open('http://www.rss.moa.gov.cn');" title="人事劳动司">人事劳动司</li>
+                    <li onclick="window.open('http://www.zfs.moa.gov.cn');" title="产业政策与法规司(农村改革试验区办公室)" class="row2">产业政策与法规司(农村改革试验区办公室)</li>
+                </ul>
+            </div>
+            <div class="gov-tabs-main col3" id="dfjg" style="display:none;">
+                <ul>
+                    <li onclick="window.open('http://www.mfa.gov.cn');" title="外交部">外交部</li>
+                    <li onclick="window.open('http://www.mod.gov.cn');" title="国防部">国防部</li>
+                    <li onclick="window.open('http://www.ndrc.gov.cn');" title="国家发展和改革委员会">国家发展和改革委员会</li>
+                </ul>
+            </div>
+            <div class="gov-tabs-main col5" id="ywxt" style="display:none;">
+                <ul>
+                    <li onclick="window.open('http://www.mfa.gov.cn');" title="外交部">外交部</li>
+                    <li onclick="window.open('http://www.mod.gov.cn');" title="国防部">国防部</li>
+                    <li onclick="window.open('http://www.ndrc.gov.cn');" title="国家发展和改革委员会">国家发展和改革委员会</li>
+                </ul>
+            </div>   
+            <div class="gov-tabs-main" id="zlxz" style="display:none;">
+                <ul>
+                    <li onclick="window.open('http://www.bjnw.gov.cn/');" title="北京农委">北京农委</li>
+                    <li onclick="window.open('http://www.bjny.gov.cn/');" title="北京农业局">北京农业局</li>
+                    <li onclick="window.open('http://nync.tj.gov.cn/');" title="天津农委">天津农委</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+<style>
+    .gov_links { padding: 0; }
+    .gov-tab-links { border-top: 0px solid #dae4da; width: 1000px; margin: 20px auto; }
+    .gov-tab-links-tabs { width: 100%; position: relative; height: 67px; }
+    /* 友情链接菜单 */
+    .gov-links-tabs { position: absolute; z-index: 200; width: 100%; background-color:#eee; }
+        .gov-links-tabs li { float: left; font-size: 13px; height: 67px; line-height: 67px; padding: 0; width:18%;margin-left:1.7%;}
+            .gov-links-tabs li.pic-link3 { position: relative; }
+                .gov-links-tabs li.pic-link3 a { text-align: center; background: #f5f5f5; height: 36px; line-height: 36px; border: 1px solid #a3a8a3; display: block; margin: 14.5px 0px 0; }
+                    .gov-links-tabs li.pic-link3 a img { vertical-align: middle; float: right; padding: 16px 15px; border-left: 1px solid silver; }
+
+            .gov-links-tabs li a:hover { color: #000; }
+            .gov-links-tabs li.cur { position: relative; }
+                .gov-links-tabs li.cur a { color: #076435; }
+
+    .gov-tabs-main { border: 1px solid #cbcbcb; overflow: visible; width: 998px; margin-top: -1px; display: none; position: absolute; top: -370px; left: 0; z-index: 100; height: 350px; background: #fff; padding: 10px 0; }
+        .gov-tabs-main ul { overflow-x: hidden; height: 330px; overflow-y: auto; margin-top: 20px; }
+            .gov-tabs-main ul li {
+                width: 350px;
+                margin-left: 20px;
+                height: 26px;
+                padding: 5px 10px;
+                white-space: normal;
+                cursor: pointer; /*line-height: 36px;*/
+                font-size: 13px;
+                float: left;
+                text-overflow: ellipsis;
+                overflow: hidden;
+                display: -webkit-box;
+                -webkit-box-orient: vertical;
+                -webkit-line-clamp: 2;
+            }
+                .gov-tabs-main ul li:hover {
+                    color:#08b143;
+                }
+             .gov-tab-links-tabs .col5 ul li {
+                    width: 168px;
+                    padding: 7px 0 7px 10px;
+                }
+    .gov-tab-links-tabs .col3 ul li {
+        width: 208px;
+        padding: 7px 0 7px 10px;
+    }
+
+</style>
+
+<script>
+    $(function () {
+        var realpath = 'admin/';
+        //从数据库获取超链接
+        getDownloadAll();
+        getFriendShipLinkAll();
+        //getdfjgAll();
+       // CreateLinks('txwz', LinksData);
+        CreateLinks('ywxt');
+       // CreateLinks('zlxz', LinksData);
+
+        //tab切换
+        $(".gov-links-tabs li").hover(function () {
+            var index = $(this).index();
+           //console.log('index',index);                  
+            $(this).addClass("cur").siblings().removeClass("cur");
+            if (index != 2) {
+                if (index > 2)
+                    $(".gov-tabs-main").eq(index-1).show().siblings(".gov-tabs-main").hide();
+                else
+                    $(".gov-tabs-main").eq(index).show().siblings(".gov-tabs-main").hide();
+            }
+            else
+                $(".gov-tabs-main").hide();
+        });
+        $(".gov-tab-links").hover(function () { }, function () { $(".gov-tabs-main").hide(); })
+    });   
+    //var LinksData = [];
+    
+    //for (var i = 0; i < 10; i++) {
+    //    LinksData.push({ title: '网站' + i, url: i })
+    //}
+
+    function CreateLinks(id) {
+         
+        $.ajax({
+            url: '/DownloadCenter/getYWTXList',
+            async: true,
+            dataType: "json",
+            success: function (data) {
+                var lis = "<ul>";
+                for (var i = 0; i < data.length; i++) {
+                    if (data[i].ImageUrl == null || data[i].ImageUrl == 'null')
+                        lis += '<li>' + data[i].ImageName + '</li>';
+                    else
+                        lis += '<li onclick="window.open(\'' + data[i].ImageUrl + '\');" title="' + data[i].ImageName + '" >' + data[i].ImageName + '</li>';
+                }
+                lis += "</ul>";
+                $("#" + id).html(lis);
+            }
+        });
+
+    }
+
+    //获取下载列表信息
+    function getDownloadAll() {
+      //  console.log("getDownloadAll begin");
+        //var obUl = $("#" + id);
+        $.ajax({
+            type: "post",
+            url: "/DownloadCenter/GetZLXZList",//?Category=" + "会议通知" + "&OrganizeId=",
+            dataType: "json",
+            async: false,
+            success: function (msg) {
+              //  console.log('getDownloadAll data:', msg);
+                if (msg.length > 0) {
+                    createDownload("zlxz", msg);
+                   // CreateLinks('zlxz', msg);
+                }
+            }
+        });
+    }
+    //创建下载列表信息
+    function createDownload(divid, data) {
+        var ul = $("#" + divid + " ul");
+        ul.empty();
+        if (data.length == 0) return;
+        var lis = "";
+        var ImagePath = "";
+        var maxCount = 5;
+        //if (maxCount > data.length) {
+            maxCount = data.length;
+        //}
+        for (var i = 0; i < maxCount; i++) {
+            var d = data[i];   
+            var li = "<li><a href='/Home/FileList?ItemDetailId=" + d.ItemDetailId + "&ItemName=" + d.ItemName + "'  title=\"" + d.ItemName + "\" target='_blank' >" + d.ItemName + "</a>";
+                li += "</li>";
+                lis += li;            
+        }
+        ul.html(lis);
+    }
+    //获取友情链接列表信息
+    function getFriendShipLinkAll() {
+        //console.log("getFriendShipLinkAll begin");
+        //var obUl = $("#" + id);
+        $.ajax({
+            type: "post",
+            url: "/FriendShipLink/GetLinkList",//?Category=" + "会议通知" + "&OrganizeId=",
+            dataType: "json",
+            data: "TypeName=&ImageName=",
+            async: false,
+            success: function (msg) {
+               // console.log('getFriendShipLinkAll data:',msg);
+                if (msg.length > 0) {
+                    createLink("txwz", msg, "体系网站");
+                    createLink("dfjg", msg, "省级农业农村部门网站");
+                  //  createLink("linkXiehui", msg, "协会网站");
+                   // createLink("linkHangye", msg, "行业网站");
+                }
+            }
+        });
+    }
+    //创建友情链接
+    function createLink(divid, data, TypeName) {
+        var ul = $("#" + divid + " ul");
+        if (data.length == 0) return;
+        ul.empty();
+        var lis = "";
+        for (var i = 0; i < data.length; i++) {
+            var d = data[i];
+            //console.log('createLink d:', d);
+            if (TypeName != d.TypeName) {
+                continue;
+            }
+            lis += '<li><a href="' + d.LinkUrl + '" target="_blank" title="' + d.LinkName + '" >' + d.LinkName + '</a></li>';
+        }
+        ul.html(lis);
+    }
+
+    function getdfjgAll() {
+        $.ajax({
+            type: "post",
+            url: "/JGZN/GetPartList",
+            dataType: "json",
+            async: false,
+            success: function (msg) {
+                if (msg.length > 0) {
+                    var lis = "<ul>";
+                    for (var i = 0; i < msg.length; i++) {
+                        var d = msg[i];
+                        if (d.WebAddress == null || d.WebAddress == "")
+                            lis += '<li><a style="color:#4e4d4d;" href="javascript:;" >' + d.WebName + '</a></li>';
+                        else
+                            lis += '<li><a href="' + d.WebAddress + '" target="_blank" title="' + d.WebName + '">' + d.WebName + '</a></li>';
+                    }
+                    lis += "</ul>";
+                    $("#dfjg").empty();
+                    $("#dfjg").html(lis);
+                }
+            }
+        });
+    }
+</script>
+    <style>
+    .footer {
+        height: 200px;
+        border-top: 1px solid #fff;
+        overflow: hidden;
+        background-size: 100% 100%;
+        background: linear-gradient(to bottom,#f1f4ef,#d2d3d2);
+        /*background: #f1f4ef;*/
+        margin: 0;
+        color: #222121;
+        padding-bottom: 10px;
+        margin-top: 20px;
+    }
+        .footer a {
+            text-decoration: none;
+            color: #222121;
+        }
+
+    .footer_con {
+        width: 1000px;
+        margin: 35px auto;
+        overflow: hidden;
+    }
+
+    .footer a:hover {
+        color: #010000;
+    }
+
+    .footer .footer_left {
+        float: left;
+        width: 80px;
+        margin: 30px 0 0 35px;
+    }
+
+    .footer .footer_mid {
+        float: left;
+        width: 685px;
+        text-align: center;
+    }
+
+    .footer .footer_nav {
+        padding: 7px 15px;
+        overflow: hidden;
+    }
+
+    .footer .footer_mid p {
+        line-height: 28px;
+    }
+
+    .footer .footer_mid span {
+        margin: 0 8px;
+    }
+
+    .footer .footer_nav a {
+        margin: 0 18px;
+        font-size: 18px;
+    }
+
+    .footer .footer_right {
+        float: right;
+        /*width: 160px;*/
+        margin: 50px 0 0 0 !important;
+    }
+    .imger{
+        width:120px;
+        margin-top:-40px;
+        margin-left:-70%;
+    }
+</style>
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<!--footer begin-->
+<div class="footer">
+    <div class="footer_con">
+        <div class="footer_left">
+            <span id="_ideConac"><a href="http://bszs.conac.cn/sitename?method=show&id=227FF59396E37567E053022819AC905B" target="_blank"><img id="imgConac" vspace="0" hspace="0" border="0" src="/Content/images/index/9.png" data-bd-imgshare-binded="1"></a></span>
+        </div>
+        <div class="footer_mid">
+            <div class="footer_nav">
+                <a href="/about/aboutus" target="_blank">关于我们</a>|
+                <a href="/about/statement" target="_blank">网站声明</a>|
+                <a href="/about/sitemap" target="_blank">网站地图</a>|
+                
+                <a href="/about/contactus" target="_blank">联系我们</a>
+            </div>
+            <p><div id="busuanzi_container_site_uv">您是第<span id="busuanzi_value_site_uv"></span>位访客</div>&nbsp; &nbsp; &nbsp;<div id="busuanzi_container_site_pv">总访问量<span id="busuanzi_value_site_pv"></span>人次</div></p>
+            <p><span>主办单位：全国农业技术推广服务中心</span></p>
+            <p><span>地 址：北京市朝阳区麦子店街20号&nbsp; &nbsp; &nbsp; 邮 编：100125 <!--&nbsp; &nbsp; &nbsp;最佳浏览器模式：1024*768分辨率--></span></p>
+            <p><span><a href="https://beian.miit.gov.cn" target="_blank">京ICP备13002323号-1</a>&nbsp; &nbsp; &nbsp; 京公网安备<a target="_blank" href="http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=11010502034442&token=c39812ea-3b2b-4cd3-998e-f2a147b264b6">11010502034442</a></span></p>
+        </div>
+        <div class="footer_right" >
+            <img class="imger" src="/Content/images/erweima.jpg" />
+            
+        </div>
+    </div>
+</div>
+
+
+    
+    <script>
+        //var loc = window.location.href;
+        //console.log(loc);
+        //console.log(loc == "http://localhost:25228/");
+        //if (loc == "http://localhost:25228/" || loc == "https://202.127.42.168/" || loc.toLowerCase() == "https://202.127.42.168/home/index" || loc == "https://www.natesc.org.cn/" || loc.toLowerCase() == "https://www.natesc.org.cn/home/index") {
+        //    console.log(loc);
+        //    document.getElementById("year2021_100").style.display = "block";
+        //}
+    </script>
+</body>
+</html>

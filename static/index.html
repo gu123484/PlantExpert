@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>三大作物栽培智能问答</title>
+<script>
+/* ECharts 顺序加载：本站 /static 优先（无外网依赖），CDN 兜底 */
+(function () {
+  const SRCS = ["/static/echarts.min.js",
+                "https://cdn.jsdelivr.net/npm/echarts@5.5.1/dist/echarts.min.js",
+                "https://cdnjs.cloudflare.com/ajax/libs/echarts/5.5.1/echarts.min.js"];
+  let i = 0;
+  (function next() {
+    if (window.echarts || i >= SRCS.length) {
+      if (window.__onEcharts) window.__onEcharts(!!window.echarts);
+      return;
+    }
+    const s = document.createElement("script");
+    s.src = SRCS[i++]; s.onload = next; s.onerror = next;
+    document.head.appendChild(s);
+  })();
+})();
+</script>
+<style>
+  :root {
+    color-scheme: light;
+    --surface-1: #fcfcfb;      /* 图表面板 */
+    --page:      #f9f9f7;
+    --ink-1:     #0b0b0b;
+    --ink-2:     #52514e;
+    --ink-3:     #898781;      /* muted */
+    --hairline:  #e1e0d9;
+    --baseline:  #c3c2b7;
+    --border:    rgba(11,11,11,.10);
+    --wash:      #f0efec;
+    /* 节点分类（已过验证器：7 槽分类 + 参数值用序列浅步） */
+    --cat-crop:   #4a3aa7;  --cat-stage: #e87ba4;  --cat-region: #008300;
+    --cat-entity: #2a78d6; --cat-value: #cde2fb;  --cat-drug:   #eb6834;
+    --cat-growth: #1baf7a; --cat-std:   #eda100;
+    --warn: #fab219;  --good: #0ca30c;
+  }
+  * { box-sizing: border-box; }
+  html, body { height: 100%; }
+  body {
+    margin: 0; background: var(--page); color: var(--ink-1);
+    font: 14px/1.6 system-ui, -apple-system, "Segoe UI", "Microsoft YaHei", "PingFang SC", sans-serif;
+    display: flex; flex-direction: column;
+  }
+  /* ---------- 头部 ---------- */
+  header {
+    display: flex; align-items: center; gap: 20px; flex-wrap: wrap;
+    padding: 10px 20px; background: var(--surface-1); border-bottom: 1px solid var(--hairline);
+  }
+  header h1 { font-size: 17px; margin: 0; font-weight: 650; }
+  header .sub { color: var(--ink-3); font-size: 12px; }
+  .badge {
+    margin-left: auto;
+    font-size: 11px; color: var(--ink-2); border: 1px solid var(--border);
+    border-radius: 999px; padding: 2px 10px; background: var(--wash);
+  }
+  /* ---------- 主区 ---------- */
+  main { flex: 1; display: grid; grid-template-columns: clamp(360px, 34vw, 480px) 1fr;
+         gap: 12px; padding: 12px; min-height: 0; }
+  .panel { background: var(--surface-1); border: 1px solid var(--hairline);
+           border-radius: 10px; display: flex; flex-direction: column; min-height: 0; }
+  /* ---------- 对话 ---------- */
+  .chat-head { padding: 10px 14px; border-bottom: 1px solid var(--hairline);
+               display: flex; align-items: center; gap: 8px; }
+  .chat-head h2 { font-size: 14px; margin: 0; font-weight: 600; }
+  .sugg { display: flex; gap: 6px; flex-wrap: wrap; padding: 10px 12px 0; }
+  .sugg button {
+    font-size: 12px; color: var(--ink-2); background: none; cursor: pointer;
+    border: 1px solid var(--hairline); border-radius: 999px; padding: 3px 10px;
+  }
+  .sugg button:hover { background: var(--wash); }
+  #msgs { flex: 1; overflow-y: auto; padding: 12px 14px; display: flex;
+          flex-direction: column; gap: 12px; }
+  .msg { max-width: 92%; white-space: pre-wrap; word-break: break-word; }
+  .msg.user { align-self: flex-end; background: var(--wash);
+              border: 1px solid var(--hairline); border-radius: 12px 12px 3px 12px;
+              padding: 8px 12px; }
+  .msg.bot { align-self: flex-start; }
+  .msg.bot .who { font-size: 11px; color: var(--ink-3); margin-bottom: 2px; }
+  .msg.bot .body { border-left: 2px solid var(--hairline); padding-left: 10px; }
+  .meta { margin-top: 6px; display: flex; gap: 5px; flex-wrap: wrap; align-items: center; }
+  .meta .lab { font-size: 11px; color: var(--ink-3); }
+  .chip {
+    display: inline-flex; align-items: center; gap: 5px; font-size: 11px;
+    color: var(--ink-2); border: 1px solid var(--hairline); border-radius: 999px;
+    padding: 1px 8px; background: var(--surface-1);
+  }
+  .chip .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--cat-entity); }
+  .refusal {
+    border-left: 3px solid var(--warn); background: rgba(250,178,25,.10);
+    border-radius: 4px; padding: 8px 12px;
+  }
+  .refusal .tag { font-size: 12px; font-weight: 600; display: block; }
+  .caret { display: inline-block; width: 7px; height: 14px; background: var(--ink-2);
+           vertical-align: -2px; animation: blink 1s steps(1) infinite; }
+  @keyframes blink { 50% { opacity: 0; } }
+  .composer { display: flex; gap: 8px; padding: 10px; border-top: 1px solid var(--hairline); }
+  .composer input {
+    flex: 1; font: inherit; padding: 8px 12px; border: 1px solid var(--baseline);
+    border-radius: 8px; background: var(--surface-1); color: var(--ink-1); outline: none;
+  }
+  .composer input:focus { border-color: var(--cat-entity); }
+  .composer button {
+    font: inherit; font-weight: 600; color: #fff; background: var(--cat-entity);
+    border: 0; border-radius: 8px; padding: 8px 18px; cursor: pointer;
+  }
+  .composer button:disabled { opacity: .45; cursor: wait; }
+  /* ---------- 图谱 ---------- */
+  .toolbar { display: flex; gap: 8px; align-items: center; flex-wrap: wrap;
+             padding: 10px 12px; border-bottom: 1px solid var(--hairline); }
+  .toolbar button, .toolbar select, .toolbar input {
+    font: inherit; font-size: 13px; padding: 6px 12px; border: 1px solid var(--baseline);
+    border-radius: 8px; background: var(--surface-1); color: var(--ink-1); outline: none;
+  }
+  .toolbar input { width: 200px; }
+  .toolbar button { cursor: pointer; }
+  .toolbar button:hover, .toolbar select:hover { background: var(--wash); }
+  .legend { display: flex; gap: 12px; flex-wrap: wrap; padding: 6px 14px;
+            font-size: 11px; color: var(--ink-2); border-bottom: 1px solid var(--hairline); }
+  .legend i { display: inline-block; width: 9px; height: 9px; border-radius: 50%;
+              margin-right: 4px; vertical-align: -1px; }
+  #count { margin-left: auto; color: var(--ink-3); font-size: 11px; }
+  #chart { flex: 1; min-height: 0; }
+  #chart .placeholder {
+    height: 100%; display: flex; align-items: center; justify-content: center;
+    color: var(--ink-3); font-size: 13px;
+  }
+  /* 节点详情卡 */
+  #detail {
+    position: absolute; right: 14px; top: 104px; width: 330px;
+    max-height: calc(100% - 124px); overflow-y: auto; display: none;
+    background: var(--surface-1); border: 1px solid var(--hairline);
+    border-radius: 10px; box-shadow: 0 6px 24px rgba(11,11,11,.10); padding: 12px 14px;
+  }
+  #detail h3 { margin: 0 24px 2px 0; font-size: 15px; }
+  #detail .close { position: absolute; right: 8px; top: 6px; border: 0; background: none;
+                   font-size: 16px; color: var(--ink-3); cursor: pointer; }
+  #detail .dmeta { font-size: 12px; color: var(--ink-3); margin-bottom: 8px; }
+  .fact { padding: 5px 0; border-top: 1px dashed var(--hairline); font-size: 12.5px; }
+  .fact b { font-weight: 600; }
+  .fact .cond { color: var(--ink-3); font-size: 11.5px; }
+  .nb { display: inline-flex; align-items: center; gap: 4px; margin: 2px 4px 2px 0;
+        font-size: 11.5px; color: var(--ink-2); border: 1px solid var(--hairline);
+        border-radius: 999px; padding: 1px 8px; cursor: pointer; background: none; }
+  .nb:hover { background: var(--wash); }
+  .nb i { width: 7px; height: 7px; border-radius: 50%; }
+  .graph-wrap { position: relative; flex: 1; min-height: 0; display: flex; flex-direction: column; }
+  @media (max-width: 900px) {
+    main { grid-template-columns: 1fr; grid-template-rows: 52vh 1fr; }
+  }
+</style>
+</head>
+<body>
+<header>
+  <div>
+    <h1>🌾 三大作物栽培智能问答</h1>
+    <div class="sub">GraphRAG：知识图谱检索 + 微调模型生成 · 小麦 / 水稻 / 玉米</div>
+  </div>
+  <span class="badge" id="badge">连接中…</span>
+</header>
+
+<main>
+  <section class="panel">
+    <div class="chat-head"><h2>💬 询问种植技术</h2></div>
+    <div class="sugg" id="sugg"></div>
+    <div id="msgs"></div>
+    <div class="composer">
+      <input id="q" placeholder="例如：玉米大喇叭口期怎么管理？" autocomplete="off">
+      <button id="send">发送</button>
+    </div>
+  </section>
+
+  <section class="panel">
+    <div class="toolbar">
+      <button id="btn-overview">总览</button>
+      <input id="gq" placeholder="搜索实体，如：条锈病 / 拔节 / 戊唑醇">
+      <button id="btn-search">查看邻域</button>
+      <select id="crop">
+        <option value="">全部作物</option>
+        <option value="小麦">小麦</option>
+        <option value="水稻">水稻</option>
+        <option value="玉米">玉米</option>
+      </select>
+    </div>
+    <div class="legend" id="legend"><span id="count"></span></div>
+    <div class="graph-wrap">
+      <div id="chart"><div class="placeholder">图谱加载中…</div></div>
+      <div id="detail"></div>
+    </div>
+  </section>
+</main>
+
+<script>
+"use strict";
+const CAT = {
+  Crop:   {name: "作物",   color: "#4a3aa7", size: 36},
+  Stage:  {name: "环节",   color: "#e87ba4", size: 20},
+  Region: {name: "地区",   color: "#008300", size: 12},
+  Entity: {name: "技术实体", color: "#2a78d6", size: 12},
+  Value:  {name: "参数值", color: "#cde2fb", size: 6},
+  "药剂":  {name: "药剂",  color: "#eb6834", size: 16},
+  "生育期": {name: "生育期", color: "#1baf7a", size: 14},
+  "标准":  {name: "标准",  color: "#eda100", size: 13},
+};
+const $ = id => document.getElementById(id);
+
+/* ---------- 头部状态 ---------- */
+fetch("/health").then(r => r.json()).then(h => {
+  $("badge").textContent = h.llm + " · 检索：" + (h.dense ? "词法+语义" : "词法");
+}).catch(() => $("badge").textContent = "后端未连接");
+
+/* ---------- 图例 ---------- */
+for (const [lb, c] of Object.entries(CAT)) {
+  $("legend").insertAdjacentHTML("beforeend",
+    `<span><i style="background:${c.color}"></i>${c.name}</span>`);
+}
+
+/* ---------- 对话（SSE 流式） ---------- */
+const SUGGS = ["玉米叶子一条一条的黄斑，咋回事？", "玉米收完怎么存才不会霉？",
+               "黄淮海小麦什么时候播种？亩基本苗多少？", "玉米大喇叭口期怎么管理？"];
+SUGGS.forEach(s => {
+  const b = document.createElement("button");
+  b.textContent = s;
+  b.onclick = () => { $("q").value = s; ask(); };
+  $("sugg").appendChild(b);
+});
+
+function addMsg(cls, html) {
+  const d = document.createElement("div");
+  d.className = "msg " + cls; d.innerHTML = html;
+  $("msgs").appendChild(d);
+  $("msgs").scrollTop = $("msgs").scrollHeight;
+  return d;
+}
+const esc = s => s.replace(/[&<>]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;"}[c]));
+
+let busy = false;
+const history = [];          // 多轮对话：[{role, content}]，随问题一并发给后端
+async function ask() {
+  if (busy) return;
+  const q = $("q").value.trim();
+  if (!q) return;
+  $("q").value = ""; busy = true; $("send").disabled = true;
+  addMsg("user", esc(q));
+  const box = addMsg("bot", `<div class="who">🌾 助手</div>
+    <div class="body"><span class="caret"></span></div><div class="meta"></div>`);
+  const body = box.querySelector(".body"), meta = box.querySelector(".meta");
+  let full = "";             // 本轮完整回答（成功后入对话历史）
+  try {
+    const res = await fetch("/ask", {method: "POST",
+      headers: {"Content-Type": "application/json"},
+      body: JSON.stringify({question: q, history: history.slice(-4)})});
+    const reader = res.body.getReader(), dec = new TextDecoder();
+    let buf = "", mode = "";
+    const handle = ev => {
+      if (ev.type === "meta") {
+        mode = ev.mode;
+        if (mode === "refusal") {
+          meta.innerHTML = "";
+          body.innerHTML = `<div class="refusal"><span class="tag">⚠ 超出知识范围</span></div>`;
+          body.querySelector(".refusal").insertAdjacentHTML("beforeend", "");
+        } else if (mode === "rag") {
+          meta.innerHTML = `<span class="lab">🔍 图谱命中</span>` +
+            ev.entities.map(e => `<span class="chip"><span class="dot"></span>${esc(e.name)}</span>`).join("");
+        } else {
+          meta.innerHTML = `<span class="chip">域内问题 · 图谱无直接命中 · 纯模型回答</span>`;
+        }
+      } else if (ev.type === "status") {
+        body.insertAdjacentHTML("beforeend",
+          `<div style="color:var(--ink-3);font-size:11.5px">⏳ ${esc(ev.t)}</div>`);
+        $("msgs").scrollTop = $("msgs").scrollHeight;
+      } else if (ev.type === "delta") {
+        full += ev.t;
+        let h = body.innerHTML;
+        if (h.includes("caret")) h = h.replace('<span class="caret"></span>', "");
+        if (mode === "refusal") {
+          body.querySelector(".refusal").insertAdjacentText("beforeend", ev.t);
+        } else body.innerHTML = h + esc(ev.t);
+        $("msgs").scrollTop = $("msgs").scrollHeight;
+      }
+    };
+    while (true) {
+      const {done, value} = await reader.read();
+      if (done) break;
+      buf += dec.decode(value, {stream: true});
+      let i;
+      while ((i = buf.indexOf("\n\n")) >= 0) {
+        const line = buf.slice(0, i).trim(); buf = buf.slice(i + 2);
+        if (line.startsWith("data: ")) handle(JSON.parse(line.slice(6)));
+      }
+    }
+    let h = body.innerHTML;
+    body.innerHTML = h.replace('<span class="caret"></span>', "");
+    history.push({role: "user", content: q}, {role: "assistant", content: full});
+    if (history.length > 6) history.splice(0, history.length - 6);   // 只留最近 3 轮
+  } catch (err) {
+    body.innerHTML = "❌ 请求失败：" + esc(err.message);
+  }
+  busy = false; $("send").disabled = false; $("q").focus();
+}
+$("send").onclick = ask;
+$("q").addEventListener("keydown", e => { if (e.key === "Enter") ask(); });
+
+/* ---------- 知识图谱（ECharts 力导向） ---------- */
+let chart = null, lastG = null;
+function ensureChart() {
+  if (chart || !window.echarts) return chart;
+  $("chart").innerHTML = "";                    // 清掉"加载中"占位符
+  chart = echarts.init($("chart"));
+  chart.on("click", p => { if (p.dataType === "node") openDetail(p.data.id); });
+  window.addEventListener("resize", () => chart && chart.resize());
+  return chart;
+}
+window.__onEcharts = ok => {                    // 图表库晚到（CDN 兜底成功）时补渲染
+  if (ok && lastG) renderGraph(lastG);
+  else if (!ok) $("chart").innerHTML =
+    '<div class="placeholder">图表库加载失败：请把 static/echarts.min.js 与网页一同部署</div>';
+};
+
+function renderGraph(g) {
+  lastG = g;
+  const c = ensureChart();
+  if (!c) { $("chart").innerHTML = '<div class="placeholder">图表库加载中…</div>'; return; }
+  if (!g.nodes.length) {
+    c.clear();
+    $("count").textContent = "未找到相关节点";
+    return;
+  }
+  $("count").textContent = g.mode === "overview" ? "图谱总览（隐藏参数值叶子）" : "邻域视图";
+  c.clear();
+  c.setOption({
+    backgroundColor: "transparent",
+    tooltip: {
+      formatter: p => p.dataType === "edge"
+        ? `${p.data.rel}`
+        : `<b>${esc(p.data.name)}</b><br>${CAT[p.data.lb].name}${p.data.crop ? " · " + p.data.crop : ""}`
+    },
+    series: [{
+      type: "graph", layout: "force", roam: true, draggable: true,
+      force: {repulsion: 140, edgeLength: [35, 80], gravity: 0.08},
+      label: {show: true, fontSize: 11, color: "#52514e",
+              position: "right", formatter: p =>
+                p.data.match || p.data.deg >= 4 || ["Crop","Stage","药剂","生育期","标准"].includes(p.data.lb)
+                  ? p.data.name : ""},
+      labelLayout: {hideOverlap: true},
+      emphasis: {focus: "adjacency", itemStyle: {borderColor: "#0b0b0b", borderWidth: 2}},
+      itemStyle: {borderColor: "#fcfcfb", borderWidth: 1},
+      lineStyle: {color: "#c3c2b7", width: 1, opacity: 0.55, curveness: 0.08},
+      edgeSymbol: ["none", "arrow"], edgeSymbolSize: 6,
+      symbolSize: (val, p) => { const d = p.data;
+                                return d.match ? Math.min(46, d.size + 8) : d.size; },
+      data: g.nodes.map(n => ({id: n.id, name: n.name, lb: n.lb, crop: n.crop,
+                               deg: n.deg, match: n.match,
+                               size: CAT[n.lb].size + Math.min(10, n.deg),
+                               itemStyle: {color: CAT[n.lb].color}})),
+      edges: g.edges.map(e => ({source: e.s, target: e.t, rel: e.rel})),
+    }],
+  }, true);
+}
+
+function loadGraph(url) {
+  fetch(url).then(r => r.json()).then(renderGraph);
+}
+$("btn-overview").onclick = () => loadGraph(`/graph?crop=${encodeURIComponent($("crop").value)}`);
+$("crop").onchange = () => { if (!$("gq").value) loadGraph(`/graph?crop=${encodeURIComponent($("crop").value)}`); };
+$("btn-search").onclick = () => {
+  const q = $("gq").value.trim();
+  if (q) loadGraph(`/graph?q=${encodeURIComponent(q)}`);
+};
+$("gq").addEventListener("keydown", e => { if (e.key === "Enter") $("btn-search").click(); });
+
+/* ---------- 节点详情卡 ---------- */
+function openDetail(id) {
+  fetch(`/node?id=${encodeURIComponent(id)}`).then(r => r.json()).then(d => {
+    const cat = CAT[d.lb] || {name: d.lb};
+    let h = `<button class="close">✕</button>
+      <h3>${esc(d.name)}</h3>
+      <div class="dmeta">${cat.name}${d.crop ? " · " + d.crop : ""}${d.stage ? " · " + d.stage : ""}</div>`;
+    if (d.facts.length) {
+      h += `<div class="dmeta" style="margin-top:4px">知识事实（${d.facts.length}）</div>`;
+      for (const f of d.facts.slice(0, 30)) {
+        h += `<div class="fact"><b>${esc(f.rel)}</b>：${esc(f.value)}` +
+             (f.g || f.c ? `<div class="cond">${esc([f.g, f.c].filter(Boolean).join("；"))}</div>` : "") +
+             (f.src ? `<div class="cond">依据：${esc(f.src.slice(0, 60))}</div>` : "") + `</div>`;
+      }
+    }
+    if (d.neighbors.length) {
+      h += `<div class="dmeta" style="margin-top:8px">关联（${d.neighbors.length}）</div>`;
+      for (const nb of d.neighbors) {
+        h += `<button class="nb" data-name="${esc(nb.name)}">
+                <i style="background:${(CAT[nb.lb]||{color:"#898781"}).color}"></i>
+                ${nb.dir}${esc(nb.rel)} ${esc(nb.name)}${nb.dose ? "（" + esc(nb.dose) + "）" : ""}</button>`;
+      }
+    }
+    const el = $("detail");
+    el.innerHTML = h; el.style.display = "block";
+    el.querySelector(".close").onclick = () => el.style.display = "none";
+    el.querySelectorAll(".nb").forEach(b => b.onclick = () => {
+      $("gq").value = b.dataset.name; $("btn-search").click();
+    });
+  });
+}
+
+loadGraph("/graph");
+</script>
+</body>
+</html>

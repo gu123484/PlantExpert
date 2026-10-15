@@ -1,0 +1,1153 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width" />
+    <title>农事指导</title>
+    <link href="/Content/site.css" rel="stylesheet"/>
+
+    <script src="/Scripts/modernizr-2.6.2.js"></script>
+
+    <script src="/Scripts/jquery-1.8.2.min.js"></script>
+    <script src="/Scripts/fileHelper.js"></script>
+    <script src="/Scripts/public.js"></script>
+    <style>
+        /* 主体  */
+        #main {
+            overflow: auto;
+            width: 1200px;
+            margin: 10px auto;
+            min-height:400px;
+        }
+
+        #mainLeft {
+            width: 900px;
+            float: right;
+        }
+
+        #maimRight {
+            width: 300px;
+            float: left;
+        }
+
+        .block1, .block2, .block3 {
+            margin-top: 10px;
+        }
+
+        .block1 {
+            width: 900px;
+            float: left;
+              height:108px;
+            overflow:hidden;
+        }
+
+        .block2 {
+            width: 440px;
+            float: left;
+            height:235px;
+            overflow:hidden;
+            margin-right: 10px;
+        }
+         .block2 li{ overflow:hidden;}
+        .block2 li img{ float:left;margin-top:10px;}
+        .block2 li a{display:block;max-width:320px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;float:left;}
+        .block3 {
+            width: 300px;
+        }
+
+        .divTitle {
+            width: 100%;
+            height: 35px;
+            line-height: 35px;
+            background: url(/Content/images/xinwenbg.png);
+            font-size: 16px;
+            color: white;
+            overflow: hidden;
+        }
+
+            .title {
+            display: inline-block;
+            height: 100%;
+            padding: 0 20px;
+            text-align: center;
+            color: white;
+        }
+
+                    .block4 .title {
+            display: inline-block;
+            background-color: #419f0b;
+        }
+
+
+        .more {
+            float: right;
+            color: green;
+            margin-right: 10px;
+        }
+
+        .block3 .more {
+            color: white;
+        }
+
+                .block4 .more {
+            line-height: 30px;
+        }
+
+        .divContent {
+            width: 100%; /*height:100px;*/
+            font-size: 16px;
+            line-height: 200%;
+        }
+
+            .divContent li img {
+                margin-right: 5px;
+            }
+
+            .divContent li a:hover {
+            }
+
+        .date {
+            float: right;
+            max-width:100px;
+            white-space:nowrap;
+            overflow:hidden;
+        }
+
+        .divChaxun {
+            width: 130px;
+            height: 40px;
+            line-height: 40px;
+            float: left;
+            background-color: #e7f4fd;
+            margin: 0 10px 5px 0;
+            text-align: center;
+        }
+
+        
+            .divChaxun img {
+                width: 20px;
+                height: 20px;
+                margin-right: 8px;
+                vertical-align: middle;
+            }
+
+       
+        .website li {
+            float: left;
+        }
+
+            .website li a {
+                display: block;
+                width: 188px;
+                height: 60px;
+                margin: 10px 0 10px 10px;
+                background-size: 100% 100%;
+                background-repeat: no-repeat;
+                background-position: center;
+            }
+    </style>
+    <style>
+        .block2 .divContent ul li:before {
+            content: url(/Content/images/ico09.png);
+            float: left;
+            display: block;
+            width: 20px;
+        }
+    </style>
+    <script>
+        function getUrlParam(name) {
+            var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
+            var r = window.location.search.substr(1).match(reg);
+            if (r != null)
+                return decodeURI(r[2]);
+            return null;
+        }
+    </script>
+</head>
+<body>
+    <script src="/Scripts/jquery-1.11.3.min.js"></script>
+<style>
+    /* CSS Document */
+    input, select, label {
+        vertical-align: middle;
+    }
+
+    ul, ol, li {
+        list-style: none;
+    }
+
+    input, img, select {
+        border: 0;
+        outline: none;
+    }
+
+    a { /*color:#333;*/
+        color: #000;
+        text-decoration: none;
+        outline: none;
+    }
+
+    .nav {
+        padding: 12px 0;
+        margin: 0 0 5px;
+        overflow: hidden;
+        color: #888;
+    }
+
+        .nav span, .nav a {
+            color: #888;
+        }
+
+            .nav a:hover {
+                color: #c40001;
+            }
+
+    #frame {
+        float: right;
+        margin-right: 50px;
+    }
+
+    .weather .cross-simple-icon {
+        line-height: 32px;
+    }
+
+    .box strong {
+        font-size: 15px;
+    }
+</style>
+<script>
+    $(function () {
+        $('.searchbtn').click(function () {
+            window.location.href = "/News/NewsListPage?Category=搜索&searchContent=" + $("#inputs").val();
+        });
+        nav_cur();
+
+    });
+
+    //头部导航点击添加class效果
+    var selLi = getUrlParam("kind");
+    function nav_cur() {
+        var src = window.location.href.toUpperCase();
+        console.log('src', src);
+        if (src.indexOf("JGZN") !== -1 || selLi.indexOf("JGZN") !== -1) {
+            $(".menu_con ul li:eq(1)").addClass("cur").siblings().removeClass("cur");
+        } else if (src.indexOf("DTXX") !== -1 || selLi.indexOf("DTXX") !== -1) {
+            $(".menu_con ul li:eq(2)").addClass("cur").siblings().removeClass("cur");
+        } else if (src.indexOf("TZGG") !== -1 || selLi.indexOf("TZGG") !== -1) {
+            $(".menu_con ul li:eq(3)").addClass("cur").siblings().removeClass("cur");
+        } else if (src.indexOf("ZTZL") !== -1 || selLi.indexOf("ZTZL") !== -1) {
+            $(".menu_con ul li:eq(4)").addClass("cur").siblings().removeClass("cur");
+        } else if (src.indexOf("DJQT") !== -1 || selLi.indexOf("DJQT") !== -1) {
+            $(".menu_con ul li:eq(5)").addClass("cur").siblings().removeClass("cur");
+        } else if (src.indexOf("HYTX") !== -1 || selLi.indexOf("HYTX") !== -1) {
+            $(".menu_con ul li:eq(6)").addClass("cur").siblings().removeClass("cur");
+        } else if (src.indexOf("KJBZ") !== -1 || selLi.indexOf("KJBZ") !== -1) {
+            $(".menu_con ul li:eq(7)").addClass("cur").siblings().removeClass("cur");
+        } else if (src.indexOf("GJHZ") !== -1 || selLi.indexOf("GJHZ") !== -1) {
+            $(".menu_con ul li:eq(8)").addClass("cur").siblings().removeClass("cur");
+        }
+        //else if (src.indexOf("SYSF") !== -1 || selLi.indexOf("SYSF") !== -1) {
+        //    $(".menu_con ul li:eq(9)").addClass("cur").siblings().removeClass("cur");
+        //}
+        else if (src.indexOf("JSMS") !== -1 || selLi.indexOf("JSMS") !== -1) {
+            $(".menu_con ul li:eq(9)").addClass("cur").siblings().removeClass("cur");
+        } else if (src.indexOf("YWXT") !== -1 || selLi.indexOf("YWXT") !== -1) {
+            $(".menu_con ul li:eq(10)").addClass("cur").siblings().removeClass("cur");
+        } else if (src.indexOf("NJSJ") !== -1 || selLi.indexOf("NJSJ") !== -1) {
+            $(".menu_con ul li:eq(11)").addClass("cur").siblings().removeClass("cur");
+        } else {
+            $(".menu_con ul li:eq(0)").addClass("cur").siblings().removeClass("cur");
+        }
+    }
+    function AddFavorite() {
+        var title = document.title;
+        var url = document.URL;
+        try {
+            window.external.addFavorite(url, title);
+        }
+        catch (e) {
+            try {
+                window.sidebar.addPanel(title, url, "");
+            }
+            catch (e) {
+                alert("抱歉，您所使用的浏览器无法完成此操作。\n\n加入收藏失败，请使用Ctrl+D进行添加");
+            }
+        }
+    }
+</script>
+<header>
+    <div style="background: url(/Content/images/index/banner.png) no-repeat; background-position: bottom center;">
+        <!--top begin-->
+        <div class="top">
+            <div class="top_con">
+                <div class="calendar">
+                    <script src="/Scripts/nyb_calendar.js"></script>
+                </div>
+                
+                <div class="top_right">
+                    <img src="/Content/images/index/dingwei.png" style="vertical-align: middle; margin-right: 10px; " /><a href="javascript:;" target="_blank" class="tool_mail">全国农业技术推广服务中心</a>
+                    <a href="#" rel="sidebar" onclick="AddFavorite();"><img style="height:16px;vertical-align:middle;margin-left:5px;" src="/Content/images/index/shoucang.png" title="收藏" /></a>
+                </div>
+            </div>
+        </div>
+        <!--top end-->
+        <!--header begin-->
+        <div class="header">
+            <div class="header_con">
+                <h1 class="logo"><a href="/home/index"><img src="/Content/images/index/logo.png"></a></h1>
+                <div class="search">
+                    <form class="fm_search" action="/News/NewsSearchListPage" target="_blank">
+                        <i class="bgimg"></i>
+                        <input type="text" name="orsen" class="txt" placeholder="请输入关键词">
+                        <input type="hidden" name="channelid" value="282019">
+                        <input type="submit" value="搜索" class="btn">
+                    </form>
+                </div>
+            </div>
+        </div>
+        <!--header end-->
+    </div>
+    <!--menu begin-->
+    <div class="menu">
+        <div class="menu_con">
+            <ul>
+                <li id="shouye"><a href="/">首页</a></li>
+                <li><a href="/JGZN">机构职能</a></li>
+                <li><a href="/DTXX/Main">动态信息</a></li>
+                <li><a href="/TZGG/List">通知公告</a></li>
+                <li><a href="/ZTZL">专题专栏</a></li>
+                <li><a href="/DJQT/List">党建群团</a></li>
+                
+                <li><a href="/HYTX">行业体系</a></li>
+                <li><a href="/KJBZ/List">科技标准</a></li>
+                <li><a href="/GJHZ/Index">国际合作</a></li>
+                
+                
+                <li><a href="/JSMS/Index?CategoryId=73af3804-f7fb-4c64-8c0a-f73ada085099">技术模式</a></li>
+                <li><a href="/YWXT">业务系统</a></li>
+                
+            </ul>
+        </div>
+    </div>
+</header>
+    <div id="main">
+        <div style="line-height:200%;color:#484848;font-size:14px;text-indent:2em;">
+            您当前所在位置：<a href="/home/index">首页</a>>><a href="">农事指导</a>>>
+        </div>
+        <div id="mainLeft">
+            
+<script>
+
+    var CategoryId = getUrlParam("CategoryId");
+    var Category = getUrlParam("Category"), keyword = getUrlParam("keyword");
+
+
+    //var PageSize = 5;
+    var page = new Object();
+    page.FirstPageText = "首页";
+    page.PrevPageText = "上一页";
+    page.NextPageText = "下一页";
+    page.LastPageText = "末页";
+    page.CurrentPageIndex = 1;
+    page.TotalCount = 0;
+    page.TotalPageCount = 3;
+    page.PageSize = 15;
+    page.DisplayPageCount = 10;
+    page.DisplayStartPage = 1;
+    //alert(Category);
+    $(function () {
+        $("nav > ul > li > a").click(function () {
+            // alert("a");
+            $("nav > ul > li > a").removeClass("cur");
+            $(this).addClass("cur");
+        });
+        if (CategoryId == "011ad655-2071-4b53-9ba4-582053c58d7b") {
+            $("#xinyong").css("display", "block");
+        }
+        Query();
+        //给标题赋值
+        if (keyword != null && keyword != "") {
+            $("#title").html("搜索关键字: '" + keyword + "' 的结果：");
+        } else {
+            $("#title").html(Category);
+        }
+        $("#FirstPage").click(function () {
+            if (page.CurrentPageIndex != 1) {
+                page.CurrentPageIndex = 1;
+                Query();
+            }
+        });
+        $("#PrevPage").click(function () {
+            if (page.CurrentPageIndex > 1) {
+                page.CurrentPageIndex--;
+                if (page.CurrentPageIndex < 1) {
+                    page.CurrentPageIndex = 1;
+                }
+                Query();
+            }
+        });
+        $("#NextPage").click(function () {
+            if (page.CurrentPageIndex < page.TotalPageCount) {
+                page.CurrentPageIndex++;
+                //if (page.CurrentPageIndex > page.TotalPageCount) {
+                //    page.CurrentPageIndex = page.TotalPageCount;
+                //}
+                Query();
+            }
+        });
+        $("#LastPage").click(function () {
+            if (page.CurrentPageIndex < page.TotalPageCount) {
+                page.CurrentPageIndex = page.TotalPageCount;
+                Query();
+            }
+        });
+        //$("#page .pageN").click(function () {
+        //    console.log("pageN click");
+        //    var v = $(this).html();
+        //    console.log(v);
+        //    page.CurrentPageIndex = v;
+        //    Query();
+        //});
+        $("#page").on('click',
+            '.pageN',
+            function () { //为a标签动态绑定事件
+                console.log("pageN click");
+                page.CurrentPageIndex = parseInt($(this).attr("data")); //获取链接里的页码
+                console.log("CurrentPageIndex:" + page.CurrentPageIndex);
+                //  page.CurrentPageIndex = page;
+                Query();
+            });
+    });
+    function Query() {
+        getNews("zyxw", Category, true);
+    }
+    function getNews(id, title, haveDate) {
+        console.log("getNews begin");
+        var p = "CategoryId=" + CategoryId + "&OrganizeId=" + "&PageSize=" + page.PageSize + "&curPage=" + page.CurrentPageIndex + "&keyword=" + keyword;
+        console.log(" urlp:" + p);
+        $.ajax({
+            type: "post",
+            url: "/news/GetNewsListPage",//?Category=" + "会议通知" + "&OrganizeId=",
+            dataType: "json",
+            cache: false,
+            async: false,
+            data: p,
+            success: function (msg) {
+                console.log(msg);
+                //创建列表
+                createTable(id, msg.News, haveDate, title);
+                page.TotalCount = msg.Total;
+                //创建分页
+                createPage();
+            }
+        });
+    }
+
+    function createTable(id, data, haveDate, title) {
+        var ul = $("#" + id + " table");
+        if (data.length == 0) return;
+        var lis = "";
+        for (var i = 0; i < data.length ; i++) {   //取聊天记录
+            var d = data[i];
+            var controller = "news";
+            if (d.IsNew == 2)
+                controller = "mymeeting";
+            var li = "<tr><td><a   target=\"_blank\"  href=\"/" + controller + "/des?id=" + d.NewsId + "&Category=" + title + "&CategoryId=" + CategoryId + "\"&keyword=" + keyword + "\" title=\"" + d.FullHead + "\" >" + d.FullHead + "</a></td>";
+            if (haveDate) {
+                li += '<td style="width:100px;text-align:center;">' + formatNumToDate(d.ReleaseTime) + "</td>";
+            }
+            li += "</tr>";
+            lis += li;
+        }
+        ul.html(lis);
+    }
+    //创建新闻栏目的内容
+    //id：所在栏目div的id
+    //data：数据
+    //haveDate：是否包含日期
+    function createList(id, data, haveDate, title) {
+        var ul = $("#" + id + " .divContent ul");
+        ul.empty();
+        if (data.length == 0) return;
+        var lis = "";
+        for (var i = 0; i < data.length; i++) {
+            var d = data[i];
+            var controller = "news";
+            if (d.IsNew == 2)
+                controller = "mymeeting";
+            var li = "<li><a   target=\"_blank\"  href=\"/" + controller + "/des?id=" + d.NewsId + "&Category=" + title + "\"&CategoryId=" + CategoryId + "\" title=\"" + d.FullHead + "\" >" + d.FullHead + "</a>";
+            if (haveDate) {
+                li += "<span class=\"date\">" + formatNumToDate(d.ReleaseTime) + "</span>";
+            }
+            li += "</li>";
+            lis += li;
+        }
+        ul.html(lis);
+    }
+
+    //创建分页
+    function createPage() {
+        var s = '';
+        page.TotalPageCount = Math.ceil(page.TotalCount / page.PageSize);
+        $("#TotalPage").html('共' + page.TotalPageCount + '页');
+        $("#CurrentPage").html('第' + page.CurrentPageIndex + '页');
+
+        var step = page.DisplayPageCount / 2;
+        //当新闻总页数少于最多的展示页数时（例如：最多展示10个页码，但是新闻总共5页）
+        // console.log(page);
+        if (page.CurrentPageIndex == (page.DisplayStartPage + page.DisplayPageCount - 1)) {
+
+            if (page.TotalPageCount > page.CurrentPageIndex) {
+                console.log('page.DisplayStartPage += page.DisplayPageCount / 2');
+                page.DisplayStartPage += step;
+            }
+        }
+        else if ((page.CurrentPageIndex == page.DisplayStartPage) && (page.CurrentPageIndex > 1)) {
+            if (page.TotalPageCount > (page.CurrentPageIndex + step)) {
+                page.DisplayStartPage -= step;
+                console.log('page.DisplayStartPage -= page.DisplayPageCount / 2;');
+            }
+        }
+        else if (page.CurrentPageIndex == 1 || page.TotalPageCount < page.DisplayPageCount) {
+            page.DisplayStartPage = 1;
+        }
+        else if (page.CurrentPageIndex == page.TotalPageCount) {
+            page.DisplayStartPage = Math.ceil(page.CurrentPageIndex / step - 2) * step + 1;;
+        }
+
+
+        var PageCount = page.TotalPageCount - page.DisplayStartPage + 1;
+        if ((page.TotalPageCount - page.DisplayStartPage) > page.DisplayPageCount) {
+            PageCount = page.DisplayPageCount;
+        }
+
+
+        for (var j = page.DisplayStartPage; j <= (page.DisplayStartPage + PageCount - 1) ; j++) {  //json[i].total是后台传过来的页数
+            //输出分页链接
+            if (page.CurrentPageIndex == j) {
+                // s += '<span data="' + j + '" class="pageN curSpan">' + j + '</span>';
+                s += '<a href="javascript:void(0)" data="' + j + '" class="pageN curSpan">' + j + '</a>';
+            }
+            else {
+                // s += '<span data="' + j + '"  class="pageN" >' + j + '</span>';
+                s += '<a href="javascript:void(0)" data="' + j + '"  class="pageN" >' + j + '</a>';
+            }
+        }
+        if ((page.DisplayStartPage + PageCount)) {
+
+        }
+        $("#page").html(s);
+    }
+
+</script>
+<style>
+
+</style>
+<div id="zyxw" style="margin-top: 10px;">
+    <div id="xinyong" style="line-height: 30px; color: red; font-size: 14px; display: none; margin-bottom: 5px;"> <a style="color:#f20b0b;font-size:16px;font-weight:bold; border:1px solid #f86f08;border-radius:4px;padding:4px 8px;" href="http://www.creditchina.gov.cn/hangyexinyong_824/?navPage=9">信用中国行业信用示范动态</a> </div>
+    <div id="title" style="line-height:200%;color:white;font-size:16px;background-color:#009237;text-align:center;border-radius:8px 8px 0 0;"></div>
+    <div class="divContent">
+        <table style="width:100%;"></table>
+    </div>
+    <div class="t-center" id="pagers">
+        <label id="TotalPage">
+            共3页
+        </label>
+        <label id="CurrentPage">
+            第2页
+        </label>
+        <span id="FirstPage">
+            首页
+        </span>
+        <span id="PrevPage">
+            上一页
+        </span>
+        <div style="display:inline;" id="page"></div>
+
+        <span id="NextPage">
+            下一页
+        </span>
+        <span id="LastPage">
+            尾页
+        </span>
+    </div>
+</div>
+<style type="text/css">
+    #zyxw a {
+        font-size: 16px;
+    }
+
+    #pagers {
+        font: 14px/19px '微软雅黑','arial','黑体';
+        text-align: center;
+        background: #f7f7f6;
+        height: 39px;
+        line-height: 39px;
+    }
+
+        /*#pagers div a {
+            border: 1px solid #ddd;
+            fill-opacity: 0.45;
+            padding: 2px 7px;
+            color: #333;
+            background-color: #fff;
+        }*/
+
+        #pagers .pageN, #pagers > span {
+            border: 1px solid silver;
+            padding: 2px 8px;
+            margin-left: 5px;
+            text-align: center;
+        }
+
+            #pagers .pageN:hover, #pagers > span:hover {
+                cursor: pointer;
+                color: blue;
+            }
+
+    #page {
+        /*float: right;
+        padding: 10px;*/
+        width: auto;
+    }
+
+
+        #page .curSpan {
+            background-color: silver;
+        }
+
+    .t-center {
+        text-align: center;
+    }
+</style>
+
+        </div>
+        <div id="maimRight">
+            
+    <div class="block3" id="gyxh" >
+        <div class="wfTitle">
+            <span>关于协会</span>
+        </div>
+        <div class="wfBody">
+            <ul>
+                <li><a href="/about/index?title=协会简介&CategoryId=f39006eb-9abf-4140-98ca-b8202da59cc2">协会简介</a></li>
+                <li><a href="/about/index?title=协会领导&CategoryId=959cd01c-e9fa-43d9-a04b-48317bdc3794">协会领导</a></li>
+                <li><a href="/about/index?title=组织机构&CategoryId=3f19b7b4-43c2-4847-b975-7c3427ba9410">组织机构</a></li>
+                <li><a href="/news/NewsListpage?Category=秘书处&CategoryId=d61a24cb-b6dd-47b8-85f8-a50be6910b5a">秘书处</a></li>
+                <li><a href="/branch/index">分支机构</a></li>
+                <li><a href="/news/NewsListpage?Category=规章办法&CategoryId=5d2db386-e345-468f-8b5f-265c47ce2929">规章办法</a></li>
+              
+                
+
+                
+                
+            </ul>
+        </div>
+        <div class="wfBottom">
+        </div>
+    </div>
+
+
+<style>
+    /*  */
+    .wfTitle,.wfBody,.wfBottom{
+        background-color:#eaf5fb;
+    }
+    .wfTitle {
+        width: 100%;
+        overflow: hidden;
+        height: 50px;
+        line-height: 50px;
+        text-align: left;
+        font-size: 18px;
+        color: #009237;
+        border: 0px solid #009237;
+        background-repeat:no-repeat;
+        background-position:20px center; 
+    }
+    .wfTitle span{
+        color:#c00000;
+        margin-left:50px;
+        font-weight:bold;
+    }
+    .wfBody {      
+         width: 100%; 
+        margin: 0 auto;
+        overflow: auto;
+    }
+     .wfBody ul{overflow:auto;}
+    
+        .wfBody li {
+            float: left;
+            text-align: center;
+             width: 105px;
+            margin: 5px -5px 10px 20px;     
+            background-color:white;
+            box-sizing:content-box;
+        }
+       .wfBody li a {
+            margin: 0 auto;
+            height: 40px;           
+            line-height: 40px;
+            text-align: center;           
+            box-sizing: border-box;            
+            font-size: 16px;            
+        }
+
+    .wfBottom {
+         width: 100%;
+        min-height:1px;
+        /*用于解决浏览器的兼容性，去掉后，最后一个li的margin-bottom就不起作用了 */ 
+    }
+    </style>
+<style>
+    /* 关于协会 */
+    #gyxh, #sjcx, #hyzx, #fzjg, #xzzx {
+        width: 265px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+        #gyxh .wfTitle {
+            background-image: url(/Content/images/index/p1.png);
+        }
+        /* 会员中心 */
+        #hyzx .wfTitle {
+            background-image: url(/Content/images/index/p2.png);
+        }
+            /*.hyzx > div {
+                margin-top: 5px;
+                text-align: center;
+                color: white;
+                height: 40px;
+                line-height: 40px;
+                font-size: 18px;
+                background: url(/Content/images/index/dengluzitibeijing.png);
+            }
+                .hyzx > div > a {
+                    color: white;
+                }
+
+            #hyzx  ul {
+                margin-top: 5px;
+            }*/
+    /* 数据查询 */
+        #sjcx .wfTitle {
+            background-image: url(/Content/images/index/p3.png);
+        }
+
+        #fzjg .wfTitle {
+            background-image: url(/Content/images/index/p4.png);
+        }
+
+        #fzjg .divContent, #xzzx .divContent {
+            background-color: #eaf5fb;
+        }
+
+        #fzjg li, #xzzx li {
+            padding-left: 20px;
+            padding-right: 20px;
+        }
+
+        #xzzx .wfTitle {
+            background-image: url(/Content/images/index/p5.png);
+        }
+</style>
+            
+
+
+    <div class="block3" id="sjcx" >
+        <div class="wfTitle">
+            <span>数据查询</span>
+        </div>
+        <div class="wfBody">
+            <ul>
+                <li class="divChaxun"><a target="_blank" href="http://202.127.42.47:6009/Home/BigDataIndex">品种保护</a></li>
+                <li class="divChaxun"><a target="_blank" href="http://202.127.42.47:6010/SDSite/Home/Index">品种审定</a></li>
+                <li class="divChaxun"><a target="_blank" href="http://202.127.42.47:6010/index.aspx">品种登记</a></li>
+                <li class="divChaxun"><a target="_blank" href="http://202.127.42.47:6006/Home/BigDataIndex">品种推广</a></li>
+                <li class="divChaxun"><a target="_blank" href="http://202.127.42.47:6010/zzcb/home/bigdataindex">种子储备</a></li>
+                <li class="divChaxun"><a target="_blank" href="http://202.127.42.47:6010/XKSite/Home/Index">经营许可</a></li>
+                <li class="divChaxun"><a target="_blank" href="http://202.127.42.47:6008/FilingAllQuery.aspx">经营备案</a></li>
+                <li class="divChaxun"><a target="_blank" href="http://202.127.42.47:6010/jcksite/home/SeedImport">种子进口</a></li>
+                <li class="divChaxun"><a target="_blank" href="http://202.127.42.47:6010/jcksite/home/SeedExport">种子出口</a></li>
+            </ul>
+        </div>
+        <div class="wfBottom">
+        </div>
+    </div>
+
+
+        </div>
+    </div>
+    <script src="/Scripts/jquery-3.7.1.js"></script>
+
+    
+    
+    <!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width" />
+    <title>友情链接</title>
+    <link href="/Content/site.css" rel="stylesheet"/>
+
+    <script src="/Scripts/modernizr-2.6.2.js"></script>
+
+</head>
+<body>
+    
+
+<script>
+
+    $(function () {
+        getFriendShipLinkAll();
+    });
+    //获取下载列表信息
+    function getFriendShipLinkAll() {
+        console.log("getFriendShipLinkAll begin");
+        //var obUl = $("#" + id);
+        $.ajax({
+            type: "post",
+            url: "/FriendShipLink/GetLinkList",//?Category=" + "会议通知" + "&OrganizeId=",
+            dataType: "json",
+            data: "TypeName=&ImageName=",
+            async: false,
+            success: function (msg) {
+                console.log(msg);
+                if (msg.length > 0) {
+                    createLink("linkZhengfu", msg, "政府及国家部委网站");
+                    createLink("linkXiehui", msg, "协会网站");
+                    createLink("linkHangye", msg, "行业网站");
+                }
+            }
+        });
+    }
+    function createLink(divid, data, TypeName) {
+        var ul = $("#" + divid);
+        if (data.length == 0) return;
+        ul.empty();        
+        var lis = "";
+        for (var i = 0; i < data.length; i++) {
+            var d = data[i];
+            if (TypeName != d.TypeName) {
+                continue;
+            }
+            var li = "<li><a href=\"" +d.LinkUrl + "\" target=\"_blank\" >" + d.LinkName + "</a>";
+
+            li += "</li>";
+            lis += li;
+        }
+        ul.html(lis);
+    }
+</script>
+<footer>
+    <div class="alignCenter" style="overflow:auto;">       
+        <div style="float:left;margin-left:70px;">
+            <img src="/Content/images/weixin2weima.png" title="微信公众账号" />
+            <p style="margin-top: 0px;margin-bottom: 10px;text-align: center;line-height: 20px;">微信公众账号</p>
+        </div>
+        <div style="float:left;margin-left:120px;">
+            <table>
+                <tr>
+                    <td colspan="2">
+                        
+                        
+                        <div class="links">
+                            <h6>政府及国家部委网站</h6>
+                            <div class="links_list">
+                                <ul id="linkZhengfu">
+
+                                    <li><a href="http://www.mfa.gov.cn" target="_blank" title="外交部">外交部</a></li>
+
+                                    <li><a href="http://www.mod.gov.cn/" target="_blank" title="国防部">国防部</a></li>
+
+                                    <li><a href="http://www.ndrc.gov.cn" target="_blank" title="发展改革委">发展改革委</a></li>
+
+                                    <li><a href="http://www.moe.gov.cn" target="_blank" title="教育部">教育部</a></li>
+
+                                    <li><a href="http://www.most.gov.cn" target="_blank" title="科技部">科技部</a></li>
+
+                                    <li><a href="http://www.miit.gov.cn/" target="_blank" title="工业和信息化部">工业和信息化部</a></li>
+
+                                    <li><a href="http://www.seac.gov.cn" target="_blank" title="国家民委">国家民委</a></li>
+
+                                    <li><a href="http://www.mps.gov.cn" target="_blank" title="公安部">公安部</a></li>
+
+                                    <li><a href="http://www.ccdi.gov.cn" target="_blank" title="监察部">监察部</a></li>
+
+                                    <li><a href="http://www.mca.gov.cn" target="_blank" title="民政部">民政部</a></li>
+
+                                    <li><a href="http://www.moj.gov.cn/" target="_blank" title="司法部">司法部</a></li>
+
+                                    <li><a href="http://www.mof.gov.cn" target="_blank" title="财政部">财政部</a></li>
+
+                                    <li><a href="http://www.mohrss.gov.cn/" target="_blank" title="人力资源社会保障部">人力资源社会保障部</a></li>
+
+                                    <li><a href="http://www.mlr.gov.cn/" target="_blank" title="国土资源部">国土资源部</a></li>
+
+                                    <li><a href="http://www.mep.gov.cn/" target="_blank" title="环境保护部">环境保护部</a></li>
+
+                                    <li><a href="http://www.mohurd.gov.cn/" target="_blank" title="住房城乡建设部">住房城乡建设部</a></li>
+
+                                    <li><a href="http://www.moc.gov.cn/" target="_blank" title="交通运输部">交通运输部</a></li>
+
+                                    <li><a href="http://www.mwr.gov.cn/" target="_blank" title="水利部">水利部</a></li>
+
+                                    <li><a href="http://www.mofcom.gov.cn/" target="_blank" title="商务部">商务部</a></li>
+
+                                    <li><a href="http://www.mcprc.gov.cn/" target="_blank" title="文化部">文化部</a></li>
+
+                                    <li><a href="http://www.nhfpc.gov.cn/" target="_blank" title="卫生计生委">卫生计生委</a></li>
+
+                                    <li><a href="http://www.pbc.gov.cn/" target="_blank" title="人民银行">人民银行</a></li>
+
+                                    <li><a href="http://www.audit.gov.cn/" target="_blank" title="审计署">审计署</a></li>
+
+                                    <li><a href="http://www.sasac.gov.cn/" target="_blank" title="国资委">国资委</a></li>
+
+                                    <li><a href="http://www.customs.gov.cn/" target="_blank" title="海关总署">海关总署</a></li>
+
+                                    <li><a href="http://www.chinatax.gov.cn/" target="_blank" title="税务总局">税务总局</a></li>
+
+                                    <li><a href="http://www.saic.gov.cn/" target="_blank" title="工商总局">工商总局</a></li>
+
+                                    <li><a href="http://www.aqsiq.gov.cn/" target="_blank" title="质检总局">质检总局</a></li>
+
+                                    <li><a href="http://www.sapprft.gov.cn/" target="_blank" title="新闻出版广电总局">新闻出版广电总局</a></li>
+
+                                    <li><a href="http://www.sport.gov.cn/" target="_blank" title="体育总局">体育总局</a></li>
+
+                                    <li><a href="http://www.chinasafety.gov.cn/" target="_blank" title="安全监管总局">安全监管总局</a></li>
+
+                                    <li><a href="http://www.sda.gov.cn/WS01/CL0001/" target="_blank" title="食品药品监管总局">食品药品监管总局</a></li>
+
+                                    <li><a href="http://www.stats.gov.cn/" target="_blank" title="统计局">统计局</a></li>
+
+                                    <li><a href="http://www.forestry.gov.cn/" target="_blank" title="林业局">林业局</a></li>
+
+                                    <li><a href="http://www.sipo.gov.cn/" target="_blank" title="知识产权局">知识产权局</a></li>
+
+                                    <li><a href="http://www.cnta.gov.cn/" target="_blank" title="旅游局">旅游局</a></li>
+
+                                    <li><a href="http://www.sara.gov.cn/" target="_blank" title="宗教局">宗教局</a></li>
+
+                                    <li><a href="http://www.counsellor.gov.cn/" target="_blank" title="参事室">参事室</a></li>
+
+                                    <li><a href="http://www.ggj.gov.cn/" target="_blank" title="国管局">国管局</a></li>
+
+                                    <li><a href="http://www.ncac.gov.cn/" target="_blank" title="版权局">版权局</a></li>
+
+                                    <li><a href="http://www.gqb.gov.cn/" target="_blank" title="侨办">侨办</a></li>
+
+                                    <li><a href="http://www.hmo.gov.cn/" target="_blank" title="港澳办">港澳办</a></li>
+
+                                    <li><a href="http://www.chinalaw.gov.cn/" target="_blank" title="法制办">法制办</a></li>
+
+                                    <li><a href="http://www.gov.cn/guoqing/2005-12/26/content_2652073.htm" target="_blank" title="国研室">国研室</a></li>
+
+                                    <li><a href="http://www.cac.gov.cn/" target="_blank" title="网信办">网信办</a></li>
+
+                                    <li><a href="http://www.gwytb.gov.cn/" target="_blank" title="台办">台办</a></li>
+
+                                    <li><a href="http://www.scio.gov.cn/" target="_blank" title="新闻办">新闻办</a></li>
+
+                                    <li><a href="http://www.xinhuanet.com/" target="_blank" title="新华社">新华社</a></li>
+
+                                    <li><a href="http://www.cas.cn/" target="_blank" title="中科院">中科院</a></li>
+
+                                    <li><a href="http://cass.cssn.cn/" target="_blank" title="社科院">社科院</a></li>
+
+                                    <li><a href="http://www.cae.cn/" target="_blank" title="工程院">工程院</a></li>
+
+                                    <li><a href="http://www.drc.gov.cn/" target="_blank" title="发展研究中心">发展研究中心</a></li>
+
+                                    <li><a href="http://www.nsa.gov.cn/" target="_blank" title="行政学院">行政学院</a></li>
+
+                                    <li><a href="http://www.cea.gov.cn/" target="_blank" title="地震局">地震局</a></li>
+
+                                    <li><a href="http://www.cma.gov.cn/" target="_blank" title="气象局">气象局</a></li>
+
+                                    <li><a href="http://www.cbrc.gov.cn/" target="_blank" title="银监会">银监会</a></li>
+
+                                    <li><a href="http://www.csrc.gov.cn/" target="_blank" title="证监会">证监会</a></li>
+
+                                    <li><a href="http://www.circ.gov.cn/" target="_blank" title="保监会">保监会</a></li>
+
+                                    <li><a href="http://www.ssf.gov.cn/" target="_blank" title="社保基金会">社保基金会</a></li>
+
+                                    <li><a href="http://www.nsfc.gov.cn/" target="_blank" title="自然科学基金会">自然科学基金会</a></li>
+
+                                    <li><a href="http://www.gjxfj.gov.cn/" target="_blank" title="信访局">信访局</a></li>
+
+                                    <li><a href="http://www.chinagrain.gov.cn/" target="_blank" title="粮食局">粮食局</a></li>
+
+                                    <li><a href="http://www.nea.gov.cn/" target="_blank" title="能源局">能源局</a></li>
+
+                                    <li><a href="http://www.sastind.gov.cn/" target="_blank" title="国防科工局">国防科工局</a></li>
+
+                                    <li><a href="http://www.tobacco.gov.cn/" target="_blank" title="烟草局">烟草局</a></li>
+
+                                    <li><a href="http://www.safea.gov.cn/" target="_blank" title="外专局">外专局</a></li>
+
+                                    <li><a href="http://www.scs.gov.cn/" target="_blank" title="公务员局">公务员局</a></li>
+
+                                    <li><a href="http://www.soa.gov.cn/" target="_blank" title="海洋局">海洋局</a></li>
+
+                                    <li><a href="http://www.sbsm.gov.cn/" target="_blank" title="测绘地信局">测绘地信局</a></li>
+
+                                    <li><a href="http://www.nra.gov.cn/" target="_blank" title="铁路局">铁路局</a></li>
+
+                                    <li><a href="http://www.caac.gov.cn/" target="_blank" title="民航局">民航局</a></li>
+
+                                    <li><a href="http://www.spb.gov.cn/" target="_blank" title="邮政局">邮政局</a></li>
+
+                                    <li><a href="http://www.sach.gov.cn/" target="_blank" title="文物局">文物局</a></li>
+
+                                    <li><a href="http://www.satcm.gov.cn/" target="_blank" title="中医药局">中医药局</a></li>
+
+                                    <li><a href="http://www.safe.gov.cn/" target="_blank" title="外汇局">外汇局</a></li>
+
+                                    <li><a href="http://www.chinacoal-safety.gov.cn/mkaj/" target="_blank" title="煤矿安监局">煤矿安监局</a></li>
+
+                                    <li><a href="http://www.saac.gov.cn/" target="_blank" title="档案局">档案局</a></li>
+
+                                    <li><a href="http://www.oscca.gov.cn/" target="_blank" title="密码局">密码局</a></li>
+
+                                    <li><a href="http://www.cpad.gov.cn/" target="_blank" title="扶贫办">扶贫办</a></li>
+
+                                    <li><a href="http://www.3g.gov.cn/index.ycs" target="_blank" title="三峡办">三峡办</a></li>
+
+                                    <li><a href="http://www.nsbd.gov.cn/" target="_blank" title="南水北调办">南水北调办</a></li>
+
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="links">
+                            <h6>协会网站</h6>
+                            <div class="links_list">
+                                <ul id="linkXiehui">
+
+                                    <li><a href="http://www.mfa.gov.cn" target="_blank" title="外交部">外交部</a></li>
+
+                                    <li><a href="http://www.mod.gov.cn/" target="_blank" title="国防部">国防部</a></li>
+
+                                    <li><a href="http://www.ndrc.gov.cn" target="_blank" title="发展改革委">发展改革委</a></li>
+
+                                    <li><a href="http://www.moe.gov.cn" target="_blank" title="教育部">教育部</a></li>
+
+                                    <li><a href="http://www.most.gov.cn" target="_blank" title="科技部">科技部</a></li>
+
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="links">
+                            <h6>行业网站</h6>
+                            <div class="links_list">
+                                <ul id="linkHangye">
+                                    <li><a href="http://www.mfa.gov.cn" target="_blank" title="外交部">外交部</a></li>
+
+                                    <li><a href="http://www.mod.gov.cn/" target="_blank" title="国防部">国防部</a></li>
+
+                                    <li><a href="http://www.ndrc.gov.cn" target="_blank" title="发展改革委">发展改革委</a></li>
+
+                                    <li><a href="http://www.moe.gov.cn" target="_blank" title="教育部">教育部</a></li>
+
+                                    <li><a href="http://www.most.gov.cn" target="_blank" title="科技部">科技部</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </td >
+                    
+                </tr>
+                <tr>
+                    <td style="width:300px;">电话：010-59194250</td>
+                    <td>传真：010-59194250</td>                 
+                </tr>
+                <tr>
+                    <td> 微信公众号： 中国种子协会</td>
+                    <td> 邮箱：zzxh@agri.gov.cn</td>
+                </tr>
+                <tr>
+                    <td colspan="2">联系地址：北京市朝阳区麦子店街农业部北区20号楼219室</td>
+                </tr>
+                <tr>
+                    <td>版权所有: 中国种子协会</td>
+                    <td></td>
+                </tr>
+            </table>
+        </div>
+    </div>
+</footer>
+<style>
+    #ulfoot>li {float:left;margin-right:30px;border:1px solid white;height:30px;line-height:30px;width:150px;}
+        #ulfoot ul{position:absolute;z-index:2000;display:none;}
+        #ulfoot>li:hover ul{display:block;}
+        #ulfoot ul a{display:block;line-height: 30px;color:white;
+    background: #4ccc4c;
+    border-top: 1px solid white;
+    padding: 0 10px;}
+
+ .links{float:left;width:220px;height:30px;background:#fff;margin:0px 15px 0 0;cursor:pointer;color:#484848}
+ .links h6{font-weight:normal;font-size:16px;line-height:30px;background:url(/Content/images/index/nyb_links_ico.png) no-repeat right center;margin:0 15px;}
+ .links .links_list{display:none;height:100px;background:#fff;font-size:16px;border:1px solid #ccc;overflow-y:auto;z-index:1000;position:relative;}
+ .links:hover .links_list, .links .cur .links_list{display:block;}
+ .links .links_list ul{overflow:hidden;}
+ .links .links_list ul li{padding:0 15px;z-index:1100;}
+ .links .links_list ul li:hover{background:#1e90ff;}
+ .links .links_list ul li:hover a{color:#fff;}
+ .links .links_list ul li a{display:block;line-height:24px;}
+</style>
+<style>
+    /* 页脚 */
+    footer {
+        text-align: left;
+        border-top: 1px solid silver;
+        padding: 20px 0;
+        background: #009237;
+        color: white;
+        margin-top: 10px;
+        width: 100%;
+        min-width: 1200px;
+    }
+
+        footer > div {
+            line-height: 200%;
+        }
+
+    table {
+        border-collapse: collapse;
+        font-size:14px;
+    }
+
+        table tr td th {
+            margin: 0;
+            padding: 0;
+            border: 0;
+        }
+
+    footer td {
+        height: 26px;
+        line-height: 26px;
+        border: 0;
+        text-align: left;
+    }
+
+    footer select {
+        background: #009237;
+        color: white;
+        border-radius: 4px;
+        margin-left: 20px;
+        min-width: 100px;
+        border: 1px solid white;
+    }
+</style>
+
+    <script src="/Scripts/jquery-3.7.1.js"></script>
+
+    
+</body>
+</html>
+
+</body>
+</html>

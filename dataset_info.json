@@ -1,0 +1,20 @@
+{
+  "agri_train": {
+    "file_name": "qa_pairs/train_10000.json",
+    "formatting": "alpaca",
+    "columns": {
+      "prompt": "instruction",
+      "query": "input",
+      "response": "output"
+    }
+  },
+  "agri_val": {
+    "file_name": "qa_pairs/val_500.json",
+    "formatting": "alpaca",
+    "columns": {
+      "prompt": "instruction",
+      "query": "input",
+      "response": "output"
+    }
+  }
+}

@@ -1,0 +1,49 @@
+### ============================================
+### Qwen3-4B 农业问答 LoRA 微调配置（LLaMA-Factory）
+### 数据：agri_dataset（10447 训练 / 500 验证）
+### ============================================
+
+### 模型
+model_name_or_path: /root/autodl-tmp/crop_cultivation/Qwen3_4b
+trust_remote_code: true
+
+### 微调方式：LoRA
+stage: sft
+do_train: true
+finetuning_type: lora
+lora_target: all
+lora_rank: 16
+lora_alpha: 32
+lora_dropout: 0.05
+
+### 数据集（dataset_dir 下需有 dataset_info.json）
+dataset: agri_train
+eval_dataset: agri_val
+dataset_dir: /root/autodl-tmp/crop_cultivation/agri_dataset
+template: qwen3
+cutoff_len: 1024
+overwrite_cache: true
+preprocessing_num_workers: 8
+
+### 输出
+output_dir: /root/autodl-tmp/crop_cultivation/output/qwen3_4b_agri_lora
+logging_steps: 20
+save_strategy: epoch
+save_total_limit: 3
+plot_loss: true
+report_to: none
+
+### 训练超参（24G 显卡如 4090/3090 可直接用；16G 改 bs=1/ga=16；32G+ 可 bs=4）
+per_device_train_batch_size: 2
+gradient_accumulation_steps: 8
+learning_rate: 5.0e-5
+num_train_epochs: 3.0
+lr_scheduler_type: cosine
+warmup_ratio: 0.1
+bf16: true
+gradient_checkpointing: true
+
+### 验证
+per_device_eval_batch_size: 4
+eval_strategy: steps
+eval_steps: 200

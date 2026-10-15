@@ -1,0 +1,19 @@
+# 敏感信息（绝不上传）
+.env
+.env.*
+neo4j_password.txt
+Neo4j-*.txt
+
+# 模型权重（BGE 模型可从 ModelScope/HuggingFace 重新下载）
+*.safetensors
+pytorch_model.bin
+*.onnx
+
+# Python 缓存
+__pycache__/
+*.pyc
+.ipynb_checkpoints/
+
+# 系统文件
+Thumbs.db
+.DS_Store

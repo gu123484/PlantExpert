@@ -1,0 +1,9 @@
+### 训练完成后：把 LoRA 权重合并进基座模型，导出完整模型
+model_name_or_path: /root/autodl-tmp/crop_cultivation/Qwen3_4b
+adapter_name_or_path: /root/autodl-tmp/crop_cultivation/output/qwen3_4b_agri_lora
+template: qwen3
+trust_remote_code: true
+
+export_dir: /root/autodl-tmp/crop_cultivation/output/qwen3_4b_agri_merged
+export_size: 2
+export_legacy_format: false
